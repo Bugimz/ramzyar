@@ -40,49 +40,60 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
     return Scaffold(
       backgroundColor: const Color(0xfff5f6fb),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 24),
-              const Text(
-                'خوش آمدید 👋',
-                style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              const Text('برای امنیت بیشتر، یک رمز ۴ رقمی تعریف کنید.'),
-              const SizedBox(height: 32),
-              _PinField(controller: _pinController, label: 'رمز عبور'),
-              const SizedBox(height: 16),
-              _PinField(controller: _confirmController, label: 'تکرار رمز عبور'),
-              const SizedBox(height: 12),
-              if (_error != null)
-                Text(
-                  _error!,
-                  style: const TextStyle(color: Colors.red),
-                ),
-              const Spacer(),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _saving ? null : _savePin,
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    backgroundColor: const Color(0xff5169f6),
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final isWide = constraints.maxWidth > 640;
+            final horizontal = isWide ? 40.0 : 24.0;
+            return Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 520),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: horizontal, vertical: 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 8),
+                      const Text(
+                        'خوش آمدید 👋',
+                        style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text('برای امنیت بیشتر، یک رمز ۴ رقمی تعریف کنید.'),
+                      const SizedBox(height: 32),
+                      _PinField(controller: _pinController, label: 'رمز عبور'),
+                      const SizedBox(height: 16),
+                      _PinField(controller: _confirmController, label: 'تکرار رمز عبور'),
+                      const SizedBox(height: 12),
+                      if (_error != null)
+                        Text(
+                          _error!,
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      const Spacer(),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: _saving ? null : _savePin,
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            backgroundColor: const Color(0xff5169f6),
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: _saving
+                              ? const CircularProgressIndicator(color: Colors.white)
+                              : const Text('تأیید و ادامه'),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                    ],
                   ),
-                  child: _saving
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text('تأیید و ادامه'),
                 ),
               ),
-              const SizedBox(height: 12),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

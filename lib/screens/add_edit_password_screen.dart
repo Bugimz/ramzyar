@@ -66,34 +66,45 @@ class _AddEditPasswordScreenState extends State<AddEditPasswordScreen> {
       appBar: AppBar(
         title: Text(widget.entry == null ? 'رمز جدید' : 'ویرایش رمز'),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            _Field(controller: _titleController, label: 'عنوان'),
-            _Field(controller: _usernameController, label: 'نام کاربری / ایمیل'),
-            _Field(controller: _passwordController, label: 'رمز عبور', obscure: true),
-            _Field(controller: _websiteController, label: 'وبسایت (اختیاری)'),
-            _Field(
-              controller: _notesController,
-              label: 'توضیحات',
-              maxLines: 3,
-            ),
-            const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _save,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xff5169f6),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isWide = constraints.maxWidth > 700;
+          final horizontal = isWide ? 32.0 : 20.0;
+          return Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 720),
+              child: SingleChildScrollView(
+                padding: EdgeInsets.fromLTRB(horizontal, 20, horizontal, 28),
+                child: Column(
+                  children: [
+                    _Field(controller: _titleController, label: 'عنوان'),
+                    _Field(controller: _usernameController, label: 'نام کاربری / ایمیل'),
+                    _Field(controller: _passwordController, label: 'رمز عبور', obscure: true),
+                    _Field(controller: _websiteController, label: 'وبسایت (اختیاری)'),
+                    _Field(
+                      controller: _notesController,
+                      label: 'توضیحات',
+                      maxLines: 3,
+                    ),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _save,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xff5169f6),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                        ),
+                        child: const Text('ذخیره'),
+                      ),
+                    ),
+                  ],
                 ),
-                child: const Text('ذخیره'),
               ),
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
