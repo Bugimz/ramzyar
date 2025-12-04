@@ -1,16 +1,38 @@
-# ramzyar
+# RamzYar (رمزیار)
 
-A new Flutter project.
+یک مدیر رمز عبور آفلاین به زبان فارسی که با Flutter و GetX ساخته شده است. اپلیکیشن شامل راه‌اندازی PIN، قفل بیومتریک، ساخت رمز تصادفی و ذخیره‌سازی امن اطلاعات ورود است.
 
-## Getting Started
+## ویژگی‌های فعلی
+- **جریان احراز هویت دو مرحله‌ای**: تعریف PIN و قفل صفحه با ورود مجدد PIN یا بیومتریک (اثر انگشت/تشخیص چهره) با ذخیره امن در `flutter_secure_storage` و `local_auth`.
+- **ذخیره‌سازی آفلاین**: مدیریت رکوردها در پایگاه داده داخلی SQLite از طریق `sqflite`، همراه با مدل `PasswordEntry` و سرویس داده `DbService`.
+- **مدیریت رمزها**: فهرست، جست‌وجو، افزودن، ویرایش و حذف ورودی‌ها با فرم افزودن/ویرایش اختصاصی و UI راست‌به‌چپ.
+- **سازندهٔ رمز تصادفی**: تولید رمز با تنظیم طول، اعداد، حروف کوچک/بزرگ و نمادها و امکان کپی سریع.
+- **پیشنهاد ذخیره خودکار**: پایش کلیپ‌بورد (اختیاری) برای تشخیص الگوی `username:password` و نمایش دیالوگ ذخیره مشابه Samsung Pass.
+- **رابط کاربری مدرن**: سربرگ گرادینت، کارت‌های آمار، فهرست‌های کارت‌شده و ناوبری پایین گرد با دکمه شناور برای جابه‌جایی بین «گنجینه رمزها» و «سازنده رمز».
 
-This project is a starting point for a Flutter application.
+## قابلیت‌های در دست توسعه / نیاز به تکمیل
+- **اجازه و سرویس پس‌زمینه** برای فعال نگه داشتن پایش (کلیپ‌بورد/فرم) زمانی که اپ در پس‌زمینه است.
+- **هماهنگی با Auto-fill اندروید/iOS** برای پیشنهاد ذخیره و پرکردن فرم‌ها فراتر از کلیپ‌بورد.
+- **تنظیمات امنیتی بیشتر** مانند زمان قفل خودکار، محدودیت اسکرین‌شات و خروج دستی.
+- **پشتیبان‌گیری/درون‌ریزی** رمزها (فایل رمزنگاری‌شده) و همگام‌سازی چند دستگاهی.
+- **ترجمه و مستندات کامل** برای کاربر نهایی داخل اپ.
 
-A few resources to get you started if this is your first Flutter project:
+## پیش‌نیازها
+- Flutter 3.19+ و Dart 3.
+- SDKها و ابزارهای پلتفرم هدف (Android/iOS) نصب و پیکربندی شده.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## اجرای پروژه
+1. وابستگی‌ها را دریافت کنید:
+   ```bash
+   flutter pub get
+   ```
+2. اپ را اجرا کنید:
+   ```bash
+   flutter run
+   ```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## ساخت و انتشار
+- اندروید: `flutter build apk --release`
+- iOS: `flutter build ios --release`
+
+> **نکته:** اگر در محیط توسعه بیومتریک یا پایش کلیپ‌بورد در دسترس نیست، برخی امکانات فعال نخواهند بود.
