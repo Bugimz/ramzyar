@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ramzyar/controllers/auth_controller.dart';
 import 'package:ramzyar/routes/app_pages.dart';
 import 'package:ramzyar/routes/app_routes.dart';
 import 'package:ramzyar/bindings/initial_binding.dart';
+import 'package:ramzyar/screens/home/home_screen.dart';
+import 'package:ramzyar/screens/lock_screen.dart';
+import 'package:ramzyar/screens/setup_pin_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
