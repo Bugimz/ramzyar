@@ -2,26 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/auth_controller.dart';
-import '../../../controllers/password_controller.dart';
+import '../../../models/password_entry.dart';
 import '../../lock_screen.dart';
 
 class HeaderCard extends StatelessWidget {
   const HeaderCard({
     super.key,
     required this.auth,
-    required this.controller,
+    required this.total,
+    required this.recent,
     this.isWide = false,
   });
 
   final AuthController auth;
-  final PasswordController controller;
+  final int total;
+  final List<PasswordEntry> recent;
   final bool isWide;
 
   @override
   Widget build(BuildContext context) {
-    final total = controller.entries.length;
-    final recent = controller.entries.take(3).toList();
-
     return LayoutBuilder(builder: (context, constraints) {
       final isStacked = constraints.maxWidth < 560;
 
@@ -183,7 +182,7 @@ class StatPill extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(value, style: TextStyle(fontWeight: FontWeight.bold, fontSize: dense ? 14 : 16)),
-          const Text(label, style: TextStyle(color: Colors.grey)),
+          Text(label, style: const TextStyle(color: Colors.grey)),
         ],
       ),
     );

@@ -47,7 +47,15 @@ class VaultView extends StatelessWidget {
                   constraints: const BoxConstraints(maxWidth: 1100),
                   child: Column(
                     children: [
-                      Obx(() => HeaderCard(auth: auth, controller: controller, isWide: isWide)),
+                      Obx(() {
+                        final items = controller.entries;
+                        return HeaderCard(
+                          auth: auth,
+                          total: items.length,
+                          recent: items.take(3).toList(),
+                          isWide: isWide,
+                        );
+                      }),
                       const SizedBox(height: 12),
                       SearchCard(onChanged: (value) => controller.searchTerm.value = value, dense: isWide),
                       const SizedBox(height: 12),

@@ -58,7 +58,7 @@ class AuthController extends GetxController {
     try {
       final didAuthenticate = await _localAuthentication.authenticate(
         localizedReason: 'ورود با اثر انگشت یا تشخیص چهره',
-        options: const AuthenticationOptions(biometricOnly: true),
+        biometricOnly: true,
       );
       if (didAuthenticate) {
         isAuthenticated.value = true;
