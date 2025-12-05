@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ramzyar/screens/home_screen.dart';
+import 'package:ramzyar/screens/home/home_screen.dart';
 import 'package:ramzyar/screens/lock_screen.dart';
 import 'package:ramzyar/screens/setup_pin_screen.dart';
 import 'package:ramzyar/controllers/auth_controller.dart';
