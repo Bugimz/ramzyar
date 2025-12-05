@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../controllers/auth_controller.dart';
 import '../../../models/password_entry.dart';
 import '../../../routes/app_routes.dart';
+import 'security_sheet.dart';
 
 class HeaderCard extends StatelessWidget {
   const HeaderCard({
@@ -46,13 +47,33 @@ class HeaderCard extends StatelessWidget {
                       const _HeaderTitles(),
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: IconButton(
-                          tooltip: 'قفل کردن',
-                          onPressed: () {
-                            auth.lockApp();
-                            Get.offAllNamed(Routes.lock);
-                          },
-                          icon: const Icon(Icons.lock_outline),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              tooltip: 'تنظیمات امنیتی',
+                              onPressed: () {
+                                Get.bottomSheet(
+                                  const SecuritySheet(),
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.white,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.vertical(top: Radius.circular(22)),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(Icons.shield_moon_outlined),
+                            ),
+                            IconButton(
+                              tooltip: 'قفل کردن',
+                              onPressed: () {
+                                auth.lockApp();
+                                Get.offAllNamed(Routes.lock);
+                              },
+                              icon: const Icon(Icons.lock_outline),
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -63,6 +84,21 @@ class HeaderCard extends StatelessWidget {
                       const _HeaderBadge(),
                       const SizedBox(width: 12),
                       const Expanded(child: _HeaderTitles()),
+                      IconButton(
+                        tooltip: 'تنظیمات امنیتی',
+                        onPressed: () {
+                          Get.bottomSheet(
+                            const SecuritySheet(),
+                            isScrollControlled: true,
+                            backgroundColor: Colors.white,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.vertical(top: Radius.circular(22)),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.shield_moon_outlined),
+                      ),
                       IconButton(
                         tooltip: 'قفل کردن',
                         onPressed: () {
