@@ -24,7 +24,7 @@ class _AddEditPasswordScreenState extends State<AddEditPasswordScreen> {
   @override
   void initState() {
     super.initState();
-    final entry = widget.entry;
+    final entry = widget.entry ?? Get.arguments as PasswordEntry?;
     if (entry != null) {
       _titleController.text = entry.title;
       _usernameController.text = entry.username;

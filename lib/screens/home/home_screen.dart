@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import '../../controllers/auth_controller.dart';
 import '../../controllers/password_controller.dart';
-import '../add_edit_password_screen.dart';
+import '../../routes/app_routes.dart';
 import 'widgets/bottom_nav.dart';
 import 'widgets/generator_view.dart';
 import 'widgets/vault_view.dart';
@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18),
               ),
-              onPressed: () => Get.to(() => AddEditPasswordScreen()),
+              onPressed: () => Get.toNamed(Routes.addEditPassword),
               child: const Icon(Icons.add_rounded, size: 30),
             )
           : null,

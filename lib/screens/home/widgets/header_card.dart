@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../controllers/auth_controller.dart';
 import '../../../models/password_entry.dart';
-import '../../lock_screen.dart';
+import '../../../routes/app_routes.dart';
 
 class HeaderCard extends StatelessWidget {
   const HeaderCard({
@@ -50,7 +50,7 @@ class HeaderCard extends StatelessWidget {
                           tooltip: 'قفل کردن',
                           onPressed: () {
                             auth.lockApp();
-                            Get.offAll(() => const LockScreen());
+                            Get.offAllNamed(Routes.lock);
                           },
                           icon: const Icon(Icons.lock_outline),
                         ),
@@ -67,7 +67,7 @@ class HeaderCard extends StatelessWidget {
                         tooltip: 'قفل کردن',
                         onPressed: () {
                           auth.lockApp();
-                          Get.offAll(() => const LockScreen());
+                          Get.offAllNamed(Routes.lock);
                         },
                         icon: const Icon(Icons.lock_outline),
                       ),

@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ramzyar/screens/home/home_screen.dart';
-import 'package:ramzyar/screens/lock_screen.dart';
-import 'package:ramzyar/screens/setup_pin_screen.dart';
-import 'package:ramzyar/controllers/auth_controller.dart';
-import 'package:ramzyar/controllers/password_controller.dart';
+import 'package:ramzyar/routes/app_pages.dart';
+import 'package:ramzyar/routes/app_routes.dart';
+import 'package:ramzyar/bindings/initial_binding.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  Get.put(AuthController());
-  Get.put(PasswordController());
   runApp(const RamzYarApp());
 }
 
@@ -18,11 +14,12 @@ class RamzYarApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final auth = Get.find<AuthController>();
-
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'رمزیار',
+      initialRoute: Routes.root,
+      initialBinding: InitialBinding(),
+      getPages: AppPages.pages,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff5169f6)),
         useMaterial3: true,

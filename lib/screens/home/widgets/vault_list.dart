@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 
 import '../../../controllers/password_controller.dart';
 import '../../../models/password_entry.dart';
-import '../../add_edit_password_screen.dart';
+import '../../../routes/app_routes.dart';
 
 class VaultList extends StatelessWidget {
   const VaultList({super.key, required this.controller});
@@ -108,7 +108,7 @@ class PasswordCard extends StatelessWidget {
                 PopupMenuButton<String>(
                   onSelected: (value) {
                     if (value == 'edit') {
-                      Get.to(() => AddEditPasswordScreen(entry: entry));
+                      Get.toNamed(Routes.addEditPassword, arguments: entry);
                     } else if (value == 'delete') {
                       controller.deleteEntry(entry.id!);
                     }
