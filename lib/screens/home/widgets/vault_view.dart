@@ -47,12 +47,12 @@ class VaultView extends StatelessWidget {
                   constraints: const BoxConstraints(maxWidth: 1100),
                   child: Column(
                     children: [
-                      Obx(() {
-                        final items = controller.entries;
+                      GetX<PasswordController>(builder: (ctrl) {
+                        final entries = ctrl.entries;
                         return HeaderCard(
                           auth: auth,
-                          total: items.length,
-                          recent: items.take(3).toList(),
+                          total: entries.length,
+                          recent: entries.take(3).toList(),
                           isWide: isWide,
                         );
                       }),
