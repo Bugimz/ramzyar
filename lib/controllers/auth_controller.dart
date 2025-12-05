@@ -86,5 +86,6 @@ class AuthController extends GetxController {
 
   Future<void> lockApp() async {
     isAuthenticated.value = false;
+    _autoBiometricTried = false;
   }
 }

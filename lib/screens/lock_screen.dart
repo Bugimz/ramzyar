@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/auth_controller.dart';
+import '../routes/app_routes.dart';
 
 class LockScreen extends StatefulWidget {
   const LockScreen({super.key});
@@ -13,10 +14,16 @@ class LockScreen extends StatefulWidget {
 class _LockScreenState extends State<LockScreen> {
   final TextEditingController _pinController = TextEditingController();
   final auth = Get.find<AuthController>();
+  late final Worker _authWorker;
 
   @override
   void initState() {
     super.initState();
+    _authWorker = ever<bool>(auth.isAuthenticated, (authed) {
+      if (authed) {
+        Get.offAllNamed(Routes.root);
+      }
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       auth.tryAutoBiometric();
     });
@@ -28,6 +35,13 @@ class _LockScreenState extends State<LockScreen> {
 
   Future<void> _biometric() async {
     await auth.authenticateWithBiometrics();
+  }
+
+  @override
+  void dispose() {
+    _authWorker.dispose();
+    _pinController.dispose();
+    super.dispose();
   }
 
   @override
