@@ -5,6 +5,16 @@ allprojects {
     }
 }
 
+subprojects {
+    plugins.withId("com.android.library") {
+        if (name == "flutter_windowmanager") {
+            extensions.configure<com.android.build.gradle.LibraryExtension>("android") {
+                namespace = "io.flutter.plugins.flutter_windowmanager"
+            }
+        }
+    }
+}
+
 val newBuildDir: Directory =
     rootProject.layout.buildDirectory
         .dir("../../build")
