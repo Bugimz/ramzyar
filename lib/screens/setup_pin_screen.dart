@@ -39,8 +39,11 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    final scaffold = Theme.of(context).scaffoldBackgroundColor;
     return Scaffold(
-      backgroundColor: const Color(0xfff4f6fb),
+      backgroundColor: scaffold,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -56,13 +59,13 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                   left: -120,
                   child: Container(
                     height: 280,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [Color(0xff5169f6), Color(0xff7289ff)],
+                        colors: [colorScheme.primary, colorScheme.secondary],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                       ),
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                         bottomLeft: Radius.circular(48),
                         bottomRight: Radius.circular(48),
                       ),
@@ -89,10 +92,10 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                                     color: Colors.white, size: 28),
                               ),
                               const SizedBox(width: 12),
-                              const Expanded(
+                              Expanded(
                                 child: Text(
                                   'راه‌اندازی امنیتی',
-                                  style: TextStyle(
+                                  style: textTheme.titleLarge?.copyWith(
                                     color: Colors.white,
                                     fontSize: 22,
                                     fontWeight: FontWeight.bold,
@@ -101,9 +104,9 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                               ),
                               Chip(
                                 backgroundColor: Colors.white.withOpacity(0.18),
-                                label: const Text(
+                                label: Text(
                                   'مرحله ۱ از ۱',
-                                  style: TextStyle(color: Colors.white),
+                                  style: textTheme.bodyMedium?.copyWith(color: Colors.white),
                                 ),
                               ),
                             ],
@@ -113,11 +116,12 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                             child: Container(
                               padding: EdgeInsets.all(cardPadding),
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: colorScheme.surface,
                                 borderRadius: BorderRadius.circular(24),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.08),
+                                    color: Colors.black
+                                        .withOpacity(Theme.of(context).brightness == Brightness.dark ? 0.3 : 0.08),
                                     blurRadius: 16,
                                     offset: const Offset(0, 10),
                                   ),
@@ -126,16 +130,16 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
+                                  Text(
                                     'انتخاب پین ۴ رقمی',
-                                    style: TextStyle(
+                                    style: textTheme.titleMedium?.copyWith(
                                         fontSize: 20, fontWeight: FontWeight.w700),
                                   ),
                                   const SizedBox(height: 8),
-                                  const Text(
+                                  Text(
                                     'این پین برای ورود سریع و رمزگذاری داده‌های شما استفاده می‌شود. '
                                     'بعداً می‌توانید ورود بیومتریک را هم فعال کنید.',
-                                    style: TextStyle(color: Colors.black54),
+                                    style: textTheme.bodyMedium?.copyWith(color: Colors.grey),
                                   ),
                                   const SizedBox(height: 24),
                                   Row(
@@ -172,13 +176,13 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                                     ),
                                   const Spacer(),
                                   Row(
-                                    children: const [
-                                      Icon(Icons.info_outline, color: Color(0xff5169f6)),
-                                      SizedBox(width: 6),
+                                    children: [
+                                      Icon(Icons.info_outline, color: colorScheme.primary),
+                                      const SizedBox(width: 6),
                                       Expanded(
                                         child: Text(
                                           'پین شما فقط روی این دستگاه و به صورت رمزگذاری‌شده نگهداری می‌شود.',
-                                          style: TextStyle(color: Colors.black54),
+                                          style: textTheme.bodyMedium?.copyWith(color: Colors.grey),
                                         ),
                                       ),
                                     ],
@@ -203,12 +207,12 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                                             const EdgeInsets.symmetric(vertical: 12.0),
                                         child: Text(
                                           _saving ? 'در حال ذخیره...' : 'تأیید و ادامه',
-                                          style: const TextStyle(fontSize: 16),
+                                          style: textTheme.titleSmall?.copyWith(color: Colors.white),
                                         ),
                                       ),
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor: const Color(0xff5169f6),
-                                        foregroundColor: Colors.white,
+                                        backgroundColor: colorScheme.primary,
+                                        foregroundColor: colorScheme.onPrimary,
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(14),
                                         ),
@@ -248,6 +252,7 @@ class _PinField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return TextField(
       controller: controller,
       obscureText: !showText,
@@ -255,7 +260,7 @@ class _PinField extends StatelessWidget {
       maxLength: 4,
       decoration: InputDecoration(
         filled: true,
-        fillColor: const Color(0xfff2f4f9),
+        fillColor: colorScheme.surfaceVariant,
         prefixIcon: const Icon(Icons.lock_outline),
         suffixIcon: IconButton(
           icon: Icon(showText ? Icons.visibility_off : Icons.visibility),
@@ -265,11 +270,11 @@ class _PinField extends StatelessWidget {
         counterText: '',
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: Color(0xffd8ddf3)),
+          borderSide: BorderSide(color: colorScheme.outlineVariant),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: Color(0xff5169f6), width: 1.6),
+          borderSide: BorderSide(color: colorScheme.primary, width: 1.6),
         ),
       ),
     );
@@ -284,13 +289,14 @@ class _HintBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Chip(
-      backgroundColor: const Color(0xffeef1fb),
+      backgroundColor: colorScheme.secondaryContainer,
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      avatar: Icon(icon, color: const Color(0xff5169f6), size: 18),
+      avatar: Icon(icon, color: colorScheme.onSecondaryContainer, size: 18),
       label: Text(
         text,
-        style: const TextStyle(color: Color(0xff5169f6)),
+        style: TextStyle(color: colorScheme.onSecondaryContainer),
       ),
     );
   }

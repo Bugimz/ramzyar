@@ -4,4 +4,5 @@ abstract class Routes {
   static const lock = '/lock';
   static const home = '/home';
   static const addEditPassword = '/password';
+  static const help = '/help';
 }

@@ -22,6 +22,9 @@ class HeaderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return LayoutBuilder(builder: (context, constraints) {
       final isStacked = constraints.maxWidth < 560;
 
@@ -29,10 +32,14 @@ class HeaderCard extends StatelessWidget {
         width: double.infinity,
         padding: EdgeInsets.all(isWide ? 22 : 18),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: colorScheme.surface,
           borderRadius: BorderRadius.circular(22),
-          boxShadow: const [
-            BoxShadow(color: Colors.black12, blurRadius: 14, offset: Offset(0, 8)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(Theme.of(context).brightness == Brightness.dark ? 0.35 : 0.08),
+              blurRadius: 14,
+              offset: const Offset(0, 8),
+            ),
           ],
         ),
         child: Column(
@@ -124,16 +131,15 @@ class HeaderCard extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                       decoration: BoxDecoration(
-                        color: const Color(0xfff8f3e8),
+                        color: colorScheme.secondaryContainer,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: const [
-                          Icon(Icons.health_and_safety_outlined,
-                              color: Color(0xfff59e0b), size: 18),
+                          Icon(Icons.health_and_safety_outlined, size: 18),
                           SizedBox(width: 6),
-                          Text('سلامت خوب', style: TextStyle(color: Color(0xffd97706))),
+                          Text('سلامت خوب'),
                         ],
                       ),
                     ),
@@ -143,8 +149,8 @@ class HeaderCard extends StatelessWidget {
             ),
             if (recent.isNotEmpty) ...[
               const SizedBox(height: 16),
-              const Text('خیراً استفاده شده',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+              Text('خیراً استفاده شده',
+                  style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 10,
@@ -172,13 +178,14 @@ class _HeaderTitles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
+      children: [
         Text('سلام، خوش برگشتی',
-            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
-        SizedBox(height: 4),
-        Text('همه رمزهایت امن و منظم هستند', style: TextStyle(color: Colors.grey)),
+            style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
+        const SizedBox(height: 4),
+        Text('همه رمزهایت امن و منظم هستند', style: textTheme.bodyMedium?.copyWith(color: Colors.grey)),
       ],
     );
   }
@@ -189,13 +196,14 @@ class _HeaderBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xffe8ecff),
+        color: colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(16),
       ),
-      child: const Icon(Icons.shield_outlined, color: Color(0xff4c63f6)),
+      child: Icon(Icons.shield_outlined, color: colorScheme.onPrimaryContainer),
     );
   }
 }
@@ -208,17 +216,26 @@ class StatPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: dense ? 10 : 12, vertical: dense ? 8 : 10),
       decoration: BoxDecoration(
-        color: const Color(0xffe8ecff),
+        color: colorScheme.secondaryContainer,
         borderRadius: BorderRadius.circular(14),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(value, style: TextStyle(fontWeight: FontWeight.bold, fontSize: dense ? 14 : 16)),
-          Text(label, style: const TextStyle(color: Colors.grey)),
+          Text(value,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: dense ? 14 : 16,
+                color: colorScheme.onSecondaryContainer,
+              )),
+          Text(label,
+              style: TextStyle(
+                color: colorScheme.onSecondaryContainer.withOpacity(0.8),
+              )),
         ],
       ),
     );

@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 
 import '../bindings/initial_binding.dart';
 import '../screens/add_edit_password_screen.dart';
+import '../screens/help_screen.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/lock_screen.dart';
 import '../screens/root_router.dart';
@@ -22,5 +23,6 @@ class AppPages {
       name: Routes.addEditPassword,
       page: () => AddEditPasswordScreen(),
     ),
+    GetPage(name: Routes.help, page: () => const HelpScreen()),
   ];
 }

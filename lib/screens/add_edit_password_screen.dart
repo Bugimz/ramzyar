@@ -65,20 +65,23 @@ class _AddEditPasswordScreenState extends State<AddEditPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     final isEditing = widget.entry != null;
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    final scaffold = Theme.of(context).scaffoldBackgroundColor;
 
     return Scaffold(
-      backgroundColor: const Color(0xfff5f6fb),
+      backgroundColor: scaffold,
       appBar: AppBar(
         elevation: 0,
         scrolledUnderElevation: 0,
         backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black87,
+        foregroundColor: colorScheme.onPrimary,
         centerTitle: false,
         title: Text(isEditing ? 'ویرایش رمز' : 'رمز جدید'),
         flexibleSpace: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xff5169f6), Color(0xff7386ff)],
+              colors: [colorScheme.primary, colorScheme.secondary],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -99,13 +102,13 @@ class _AddEditPasswordScreenState extends State<AddEditPasswordScreen> {
                 right: -80,
                 child: Container(
                   height: 180,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [Color(0xff5169f6), Color(0xff7386ff)],
+                      colors: [colorScheme.primary, colorScheme.secondary],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(36),
                       bottomRight: Radius.circular(36),
                     ),
@@ -123,11 +126,12 @@ class _AddEditPasswordScreenState extends State<AddEditPasswordScreen> {
                         Container(
                           padding: EdgeInsets.all(cardPadding),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: colorScheme.surface,
                             borderRadius: BorderRadius.circular(24),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.06),
+                                color: Colors.black
+                                    .withOpacity(Theme.of(context).brightness == Brightness.dark ? 0.32 : 0.06),
                                 blurRadius: 18,
                                 offset: const Offset(0, 10),
                               ),
@@ -141,10 +145,10 @@ class _AddEditPasswordScreenState extends State<AddEditPasswordScreen> {
                                   Container(
                                     padding: const EdgeInsets.all(10),
                                     decoration: BoxDecoration(
-                                      color: const Color(0xffedf0ff),
+                                      color: colorScheme.primaryContainer,
                                       borderRadius: BorderRadius.circular(12),
                                     ),
-                                    child: const Icon(Icons.vpn_key, color: Color(0xff5169f6)),
+                                    child: Icon(Icons.vpn_key, color: colorScheme.onPrimaryContainer),
                                   ),
                                   const SizedBox(width: 10),
                                   Expanded(
@@ -153,24 +157,23 @@ class _AddEditPasswordScreenState extends State<AddEditPasswordScreen> {
                                       children: [
                                         Text(
                                           isEditing ? 'ویرایش ورودی' : 'افزودن ورودی جدید',
-                                          style: const TextStyle(
-                                            fontSize: 18,
+                                          style: textTheme.titleMedium?.copyWith(
                                             fontWeight: FontWeight.w700,
                                           ),
                                         ),
                                         const SizedBox(height: 4),
-                                        const Text(
+                                        Text(
                                           'اطلاعات ورود را ذخیره کنید تا در پیشنهادهای خودکار نمایش داده شود.',
-                                          style: TextStyle(color: Colors.black54),
+                                          style: textTheme.bodyMedium?.copyWith(color: Colors.grey),
                                         ),
                                       ],
                                     ),
                                   ),
                                   Chip(
                                     label: Text(isEditing ? 'در حال ویرایش' : 'جدید'),
-                                    backgroundColor: const Color(0xfff1f2ff),
-                                    labelStyle:
-                                        const TextStyle(color: Color(0xff5169f6), fontWeight: FontWeight.w600),
+                                    backgroundColor: colorScheme.secondaryContainer,
+                                    labelStyle: textTheme.labelLarge
+                                        ?.copyWith(color: colorScheme.onSecondaryContainer),
                                   )
                                 ],
                               ),
@@ -217,17 +220,17 @@ class _AddEditPasswordScreenState extends State<AddEditPasswordScreen> {
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xfff7f8fe),
+                                  color: colorScheme.secondaryContainer.withOpacity(0.4),
                                   borderRadius: BorderRadius.circular(14),
                                 ),
                                 child: Row(
-                                  children: const [
-                                    Icon(Icons.lightbulb_outline, color: Color(0xff5169f6)),
-                                    SizedBox(width: 8),
+                                  children: [
+                                    Icon(Icons.lightbulb_outline, color: colorScheme.primary),
+                                    const SizedBox(width: 8),
                                     Expanded(
                                       child: Text(
                                         'با پر کردن فیلدها، سیستم پیشنهاد و پرکردن خودکار در اندروید/iOS فعال‌تر می‌شود.',
-                                        style: TextStyle(color: Colors.black54),
+                                        style: textTheme.bodyMedium?.copyWith(color: Colors.grey),
                                       ),
                                     ),
                                   ],
@@ -240,14 +243,14 @@ class _AddEditPasswordScreenState extends State<AddEditPasswordScreen> {
                                   onPressed: _save,
                                   icon: const Icon(Icons.save_outlined),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xff5169f6),
-                                    foregroundColor: Colors.white,
+                                    backgroundColor: colorScheme.primary,
+                                    foregroundColor: colorScheme.onPrimary,
                                     padding: const EdgeInsets.symmetric(vertical: 14),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(14),
                                     ),
                                   ),
-                                  label: const Text('ذخیره'),
+                                  label: Text('ذخیره', style: textTheme.titleSmall?.copyWith(color: Colors.white)),
                                 ),
                               ),
                             ],
@@ -287,6 +290,7 @@ class _Field extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: TextField(
@@ -299,8 +303,11 @@ class _Field extends StatelessWidget {
           hintText: hint,
           prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
           filled: true,
-          fillColor: const Color(0xfff3f4fb),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          fillColor: colorScheme.surfaceVariant,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: colorScheme.outlineVariant),
+          ),
         ),
       ),
     );
@@ -322,6 +329,7 @@ class _PasswordField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: TextField(
@@ -334,7 +342,7 @@ class _PasswordField extends StatelessWidget {
           hintText: 'یک رمز قوی وارد کنید یا بسازید',
           prefixIcon: const Icon(Icons.lock_outline),
           filled: true,
-          fillColor: const Color(0xfff3f4fb),
+          fillColor: colorScheme.surfaceVariant,
           suffixIcon: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -350,7 +358,10 @@ class _PasswordField extends StatelessWidget {
               ),
             ],
           ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: colorScheme.outlineVariant),
+          ),
         ),
       ),
     );
