@@ -28,6 +28,15 @@ class RamzYarApp extends StatelessWidget {
         textDirection: TextDirection.rtl,
         child: child ?? const SizedBox.shrink(),
       ),
+      home: Obx(() {
+        if (!auth.hasPin.value) {
+          return const SetupPinScreen();
+        }
+        if (!auth.isAuthenticated.value) {
+          return const LockScreen();
+        }
+        return const HomeScreen();
+      }),
     );
   }
 }
