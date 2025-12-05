@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AuthController extends GetxController {
+class AuthController extends GetxController with WidgetsBindingObserver {
   final _storage = const FlutterSecureStorage();
   final LocalAuthentication _localAuthentication = LocalAuthentication();
   static const _securityChannel = MethodChannel('ramzyar/security');
@@ -21,6 +22,7 @@ class AuthController extends GetxController {
 
   bool _autoBiometricTried = false;
   Timer? _autoLockTimer;
+  DateTime _lastInteraction = DateTime.now();
 
   static const _pinKey = 'pin_code';
   static const _biometricKey = 'biometric_enabled';
@@ -30,7 +32,15 @@ class AuthController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    WidgetsBinding.instance.addObserver(this);
     _loadState();
+  }
+
+  @override
+  void onClose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _autoLockTimer?.cancel();
+    super.onClose();
   }
 
   Future<void> _loadState() async {
@@ -127,7 +137,30 @@ class AuthController extends GetxController {
 
   void markActivity() {
     if (isAuthenticated.value) {
+      _lastInteraction = DateTime.now();
       _resetAutoLockTimer();
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      _lastInteraction = DateTime.now();
+      _autoLockTimer?.cancel();
+      return;
+    }
+
+    if (state == AppLifecycleState.resumed && isAuthenticated.value) {
+      final elapsed = DateTime.now().difference(_lastInteraction);
+      final limit = Duration(minutes: autoLockMinutes.value);
+      if (autoLockMinutes.value > 0 && elapsed >= limit) {
+        lockApp();
+      } else {
+        final remaining = autoLockMinutes.value > 0
+            ? limit - elapsed
+            : Duration.zero;
+        _resetAutoLockTimer(customDuration: remaining);
+      }
     }
   }
 
@@ -139,10 +172,12 @@ class AuthController extends GetxController {
     }
   }
 
-  void _resetAutoLockTimer() {
+  void _resetAutoLockTimer({Duration? customDuration}) {
     _autoLockTimer?.cancel();
     if (autoLockMinutes.value <= 0) return;
-    _autoLockTimer = Timer(Duration(minutes: autoLockMinutes.value), () async {
+    final duration = customDuration ?? Duration(minutes: autoLockMinutes.value);
+    _lastInteraction = DateTime.now();
+    _autoLockTimer = Timer(duration, () async {
       await lockApp();
     });
   }
