@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../controllers/password_controller.dart';
@@ -77,9 +78,22 @@ class _AddEditPasswordScreenState extends State<AddEditPasswordScreen> {
                 padding: EdgeInsets.fromLTRB(horizontal, 20, horizontal, 28),
                 child: Column(
                   children: [
-                    _Field(controller: _titleController, label: 'عنوان'),
-                    _Field(controller: _usernameController, label: 'نام کاربری / ایمیل'),
-                    _Field(controller: _passwordController, label: 'رمز عبور', obscure: true),
+                    _Field(
+                      controller: _titleController,
+                      label: 'عنوان',
+                      autofillHints: const [AutofillHints.name],
+                    ),
+                    _Field(
+                      controller: _usernameController,
+                      label: 'نام کاربری / ایمیل',
+                      autofillHints: const [AutofillHints.username, AutofillHints.email],
+                    ),
+                    _Field(
+                      controller: _passwordController,
+                      label: 'رمز عبور',
+                      obscure: true,
+                      autofillHints: const [AutofillHints.password],
+                    ),
                     _Field(controller: _websiteController, label: 'وبسایت (اختیاری)'),
                     _Field(
                       controller: _notesController,
@@ -116,12 +130,14 @@ class _Field extends StatelessWidget {
     required this.label,
     this.obscure = false,
     this.maxLines = 1,
+    this.autofillHints,
   });
 
   final TextEditingController controller;
   final String label;
   final bool obscure;
   final int maxLines;
+  final List<String>? autofillHints;
 
   @override
   Widget build(BuildContext context) {
@@ -131,6 +147,7 @@ class _Field extends StatelessWidget {
         controller: controller,
         obscureText: obscure,
         maxLines: obscure ? 1 : maxLines,
+        autofillHints: autofillHints,
         decoration: InputDecoration(
           labelText: label,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),

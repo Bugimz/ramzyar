@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/password_entry.dart';
 import '../services/db_service.dart';
 import '../services/background_monitor_service.dart';
+import '../services/autofill_bridge.dart';
 
 class PasswordController extends GetxController {
   final DbService _dbService = DbService();
@@ -34,11 +35,13 @@ class PasswordController extends GetxController {
 
   Future<void> addEntry(PasswordEntry entry) async {
     await _dbService.insertEntry(entry);
+    await AutofillBridge.cacheEntry(entry);
     await loadEntries();
   }
 
   Future<void> updateEntry(PasswordEntry entry) async {
     await _dbService.updateEntry(entry);
+    await AutofillBridge.cacheEntry(entry);
     await loadEntries();
   }
 

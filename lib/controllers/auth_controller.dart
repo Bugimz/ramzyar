@@ -13,6 +13,8 @@ class AuthController extends GetxController {
   final RxBool biometricAvailable = false.obs;
   final RxString errorMessage = ''.obs;
 
+  bool _autoBiometricTried = false;
+
   static const _pinKey = 'pin_code';
   static const _biometricKey = 'biometric_enabled';
 
@@ -27,12 +29,24 @@ class AuthController extends GetxController {
     hasPin.value = storedPin != null;
     biometricEnabled.value = (await _storage.read(key: _biometricKey)) == 'true';
     biometricAvailable.value = await _localAuthentication.canCheckBiometrics;
+
+    if (hasPin.value && biometricEnabled.value) {
+      await tryAutoBiometric();
+    }
   }
 
   Future<void> setPin(String pin) async {
     await _storage.write(key: _pinKey, value: pin);
     hasPin.value = true;
     isAuthenticated.value = true;
+  }
+
+  Future<void> tryAutoBiometric() async {
+    if (_autoBiometricTried || !biometricEnabled.value || !biometricAvailable.value) {
+      return;
+    }
+    _autoBiometricTried = true;
+    await authenticateWithBiometrics();
   }
 
   Future<bool> validatePin(String pin) async {

@@ -7,16 +7,18 @@ import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
 import androidx.core.content.ContextCompat
+import androidx.preference.PreferenceManager
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterFragmentActivity() {
-    private val channelName = "ramzyar/background"
+    private val backgroundChannel = "ramzyar/background"
+    private val autofillChannel = "ramzyar/autofill"
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, channelName)
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, backgroundChannel)
             .setMethodCallHandler { call, result ->
                 when (call.method) {
                     "startService" -> {
@@ -29,6 +31,23 @@ class MainActivity : FlutterFragmentActivity() {
                     }
                     "stopService" -> {
                         stopMonitorService()
+                        result.success(true)
+                    }
+                    else -> result.notImplemented()
+                }
+            }
+
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, autofillChannel)
+            .setMethodCallHandler { call, result ->
+                when (call.method) {
+                    "cacheCredentials" -> {
+                        val username = call.argument<String>("username")
+                        val password = call.argument<String>("password")
+                        cacheAutofill(username, password)
+                        result.success(true)
+                    }
+                    "openAutofillSettings" -> {
+                        openAutofillSettings()
                         result.success(true)
                     }
                     else -> result.notImplemented()
@@ -56,6 +75,25 @@ class MainActivity : FlutterFragmentActivity() {
                 }
                 startActivity(intent)
             }
+        }
+    }
+
+    private fun cacheAutofill(username: String?, password: String?) {
+        if (username.isNullOrEmpty() || password.isNullOrEmpty()) return
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        prefs.edit()
+            .putString("autofill_username", username)
+            .putString("autofill_password", password)
+            .apply()
+    }
+
+    private fun openAutofillSettings() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val intent = Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE).apply {
+                data = Uri.parse("package:$packageName")
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            startActivity(intent)
         }
     }
 }

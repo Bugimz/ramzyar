@@ -14,6 +14,14 @@ class _LockScreenState extends State<LockScreen> {
   final TextEditingController _pinController = TextEditingController();
   final auth = Get.find<AuthController>();
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      auth.tryAutoBiometric();
+    });
+  }
+
   Future<void> _submit() async {
     await auth.validatePin(_pinController.text.trim());
   }
