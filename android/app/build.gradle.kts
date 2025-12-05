@@ -39,6 +39,11 @@ android {
     }
 }
 
+dependencies {
+    // Used for PreferenceManager in MainActivity and AutofillService caching.
+    implementation("androidx.preference:preference-ktx:1.2.1")
+}
+
 flutter {
     source = "../.."
 }
