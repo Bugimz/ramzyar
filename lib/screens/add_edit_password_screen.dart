@@ -5,7 +5,7 @@ import '../controllers/password_controller.dart';
 import '../models/password_entry.dart';
 
 class AddEditPasswordScreen extends StatefulWidget {
-  AddEditPasswordScreen({super.key, this.entry});
+  const AddEditPasswordScreen({super.key, this.entry});
 
   final PasswordEntry? entry;
 
@@ -47,8 +47,12 @@ class _AddEditPasswordScreenState extends State<AddEditPasswordScreen> {
       title: _titleController.text.trim(),
       username: _usernameController.text.trim(),
       password: _passwordController.text.trim(),
-      website: _websiteController.text.trim().isEmpty ? null : _websiteController.text.trim(),
-      notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+      website: _websiteController.text.trim().isEmpty
+          ? null
+          : _websiteController.text.trim(),
+      notes: _notesController.text.trim().isEmpty
+          ? null
+          : _notesController.text.trim(),
       createdAt: widget.entry?.createdAt,
     );
 
@@ -78,9 +82,19 @@ class _AddEditPasswordScreenState extends State<AddEditPasswordScreen> {
                 child: Column(
                   children: [
                     _Field(controller: _titleController, label: 'عنوان'),
-                    _Field(controller: _usernameController, label: 'نام کاربری / ایمیل'),
-                    _Field(controller: _passwordController, label: 'رمز عبور', obscure: true),
-                    _Field(controller: _websiteController, label: 'وبسایت (اختیاری)'),
+                    _Field(
+                      controller: _usernameController,
+                      label: 'نام کاربری / ایمیل',
+                    ),
+                    _Field(
+                      controller: _passwordController,
+                      label: 'رمز عبور',
+                      obscure: true,
+                    ),
+                    _Field(
+                      controller: _websiteController,
+                      label: 'وبسایت (اختیاری)',
+                    ),
                     _Field(
                       controller: _notesController,
                       label: 'توضیحات',
