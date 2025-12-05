@@ -54,6 +54,28 @@ class RamzYarApp extends StatelessWidget {
           return const HomeScreen();
         }),
       ),
+      builder: (context, child) {
+        final auth = Get.find<AuthController>();
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: auth.markActivity,
+            onPanDown: (_) => auth.markActivity(),
+            child: child ?? const SizedBox.shrink(),
+          ),
+        );
+      },
+      home: Obx(() {
+        final auth = Get.find<AuthController>();
+        if (!auth.hasPin.value) {
+          return const SetupPinScreen();
+        }
+        if (!auth.isAuthenticated.value) {
+          return const LockScreen();
+        }
+        return const HomeScreen();
+      }),
     );
   }
 }
