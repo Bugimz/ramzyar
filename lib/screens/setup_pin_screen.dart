@@ -142,11 +142,16 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                                     style: textTheme.bodyMedium?.copyWith(color: Colors.grey),
                                   ),
                                   const SizedBox(height: 24),
-                                  Row(
+                                  Wrap(
+                                    spacing: 8,
+                                    runSpacing: 8,
                                     children: const [
-                                      _HintBadge(icon: Icons.timer, text: 'قفل خودکار قابل تنظیم'),
-                                      SizedBox(width: 8),
-                                      _HintBadge(icon: Icons.phonelink_lock, text: 'جلوگیری از اسکرین‌شات'),
+                                      _HintBadge(
+                                          icon: Icons.timer,
+                                          text: 'قفل خودکار قابل تنظیم'),
+                                      _HintBadge(
+                                          icon: Icons.phonelink_lock,
+                                          text: 'جلوگیری از اسکرین‌شات'),
                                     ],
                                   ),
                                   const SizedBox(height: 28),

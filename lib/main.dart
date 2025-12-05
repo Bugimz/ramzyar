@@ -4,9 +4,8 @@ import 'package:get/get.dart';
 import 'bindings/initial_binding.dart';
 import 'controllers/auth_controller.dart';
 import 'controllers/theme_controller.dart';
-import 'screens/home/home_screen.dart';
-import 'screens/lock_screen.dart';
-import 'screens/setup_pin_screen.dart';
+import 'routes/app_pages.dart';
+import 'routes/app_routes.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +28,9 @@ class RamzYarApp extends StatelessWidget {
       return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'رمزیار',
+        initialRoute: Routes.root,
         initialBinding: InitialBinding(),
+        getPages: AppPages.pages,
 
         theme: theme.lightTheme,
         darkTheme: theme.darkTheme,
@@ -47,22 +48,7 @@ class RamzYarApp extends StatelessWidget {
             ),
           );
         },
-
-        home: const RootGate(),
       );
-    });
-  }
-}
-
-class RootGate extends GetView<AuthController> {
-  const RootGate({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() {
-      if (!controller.hasPin.value) return const SetupPinScreen();
-      if (!controller.isAuthenticated.value) return const LockScreen();
-      return const HomeScreen();
     });
   }
 }
