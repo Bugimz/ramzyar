@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
+import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import io.flutter.embedding.android.FlutterFragmentActivity
@@ -15,6 +16,7 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : FlutterFragmentActivity() {
     private val backgroundChannel = "ramzyar/background"
     private val autofillChannel = "ramzyar/autofill"
+    private val securityChannel = "ramzyar/security"
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -48,6 +50,18 @@ class MainActivity : FlutterFragmentActivity() {
                     }
                     "openAutofillSettings" -> {
                         openAutofillSettings()
+                        result.success(true)
+                    }
+                    else -> result.notImplemented()
+                }
+            }
+
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, securityChannel)
+            .setMethodCallHandler { call, result ->
+                when (call.method) {
+                    "setSecure" -> {
+                        val enabled = call.argument<Boolean>("enabled") ?: false
+                        setSecureWindow(enabled)
                         result.success(true)
                     }
                     else -> result.notImplemented()
@@ -94,6 +108,16 @@ class MainActivity : FlutterFragmentActivity() {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
             startActivity(intent)
+        }
+    }
+
+    private fun setSecureWindow(enabled: Boolean) {
+        runOnUiThread {
+            if (enabled) {
+                window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+            } else {
+                window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+            }
         }
     }
 }

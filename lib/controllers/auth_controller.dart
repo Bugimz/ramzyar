@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:get/get.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthController extends GetxController {
   final _storage = const FlutterSecureStorage();
   final LocalAuthentication _localAuthentication = LocalAuthentication();
+  static const _securityChannel = MethodChannel('ramzyar/security');
 
   final RxBool hasPin = false.obs;
   final RxBool isAuthenticated = false.obs;
@@ -133,11 +133,7 @@ class AuthController extends GetxController {
 
   Future<void> _applyScreenSecure(bool enabled) async {
     try {
-      if (enabled) {
-        await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
-      } else {
-        await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
-      }
+      await _securityChannel.invokeMethod('setSecure', {'enabled': enabled});
     } catch (_) {
       // ignore platform-specific failures
     }
