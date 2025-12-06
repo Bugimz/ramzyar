@@ -199,7 +199,7 @@ class AddEditPasswordScreen extends GetView<PasswordFormController> {
                               SizedBox(
                                 width: double.infinity,
                                 child: ElevatedButton.icon(
-                                  onPressed: _save,
+                                  onPressed: controller.save,
                                   icon: const Icon(Icons.save_outlined),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: colorScheme.primary,

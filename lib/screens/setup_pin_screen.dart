@@ -49,7 +49,10 @@ class SetupPinScreen extends GetView<SetupPinController> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
+                          Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            spacing: 12,
+                            runSpacing: 8,
                             children: [
                               Container(
                                 padding: const EdgeInsets.all(12),
@@ -57,18 +60,18 @@ class SetupPinScreen extends GetView<SetupPinController> {
                                   color: Colors.white.withOpacity(0.12),
                                   borderRadius: BorderRadius.circular(16),
                                 ),
-                                child: const Icon(Icons.shield_lock_rounded,
-                                    color: Colors.white, size: 28),
+                                child: const Icon(
+                                  Icons.security,
+                                  color: Colors.white,
+                                  size: 28,
+                                ),
                               ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  'راه‌اندازی امنیتی',
-                                  style: textTheme.titleLarge?.copyWith(
-                                    color: Colors.white,
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              Text(
+                                'راه‌اندازی امنیتی',
+                                style: textTheme.titleLarge?.copyWith(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                               Chip(
