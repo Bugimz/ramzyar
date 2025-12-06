@@ -2,53 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 
-import '../../../controllers/password_controller.dart';
+import '../../../controllers/generator_controller.dart';
 
-class GeneratorView extends StatefulWidget {
+class GeneratorView extends GetView<GeneratorController> {
   const GeneratorView({super.key, required this.maxWidth});
   final double maxWidth;
 
   @override
-  State<GeneratorView> createState() => _GeneratorViewState();
-}
-
-class _GeneratorViewState extends State<GeneratorView> {
-  final controller = Get.find<PasswordController>();
-  int _length = 16;
-  bool _numbers = true;
-  bool _symbols = true;
-  bool _lower = true;
-  bool _upper = true;
-  String _generated = '';
-
-  @override
-  void initState() {
-    super.initState();
-    _generated = controller.generatePassword(
-      length: _length,
-      useNumbers: _numbers,
-      useSymbols: _symbols,
-      useLowercase: _lower,
-      useUppercase: _upper,
-    );
-  }
-
-  void _generate() {
-    setState(() {
-      _generated = controller.generatePassword(
-        length: _length,
-        useNumbers: _numbers,
-        useSymbols: _symbols,
-        useLowercase: _lower,
-        useUppercase: _upper,
-      );
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final isWide = widget.maxWidth > 900;
-    final isTablet = widget.maxWidth > 700 && widget.maxWidth <= 900;
+    final isWide = maxWidth > 900;
+    final isTablet = maxWidth > 700 && maxWidth <= 900;
     final horizontalPadding = isWide
         ? 32.0
         : isTablet
@@ -90,14 +53,17 @@ class _GeneratorViewState extends State<GeneratorView> {
                       ],
                     ),
                     const SizedBox(height: 10),
-                    Text(
-                      _generated.isEmpty ? 'حداقل یک گزینه را فعال کنید' : _generated,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: _generated.length > 24 ? 20 : 24,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    Obx(() {
+                      final text = controller.generated.value;
+                      return Text(
+                        text.isEmpty ? 'حداقل یک گزینه را فعال کنید' : text,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: text.length > 24 ? 20 : 24,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      );
+                    }),
                     const SizedBox(height: 12),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -127,15 +93,13 @@ class _GeneratorViewState extends State<GeneratorView> {
                               ],
                             ),
                           ),
-                          IconButton(
-                            onPressed: _generated.isNotEmpty
-                                ? () async {
-                                    await Clipboard.setData(ClipboardData(text: _generated));
-                                    Get.snackbar('کپی شد', 'رمز در کلیپ‌بورد ذخیره شد');
-                                  }
-                                : null,
-                            icon: const Icon(Icons.copy, color: Color(0xff4c63f6)),
-                          ),
+                          Obx(() {
+                            final hasValue = controller.generated.isNotEmpty;
+                            return IconButton(
+                              onPressed: hasValue ? controller.copyToClipboard : null,
+                              icon: const Icon(Icons.copy, color: Color(0xff4c63f6)),
+                            );
+                          }),
                         ],
                       ),
                     ),
@@ -144,58 +108,59 @@ class _GeneratorViewState extends State<GeneratorView> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text('طول رمز', style: TextStyle(color: Colors.white)),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(12),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Obx(() => Text('${controller.length.value}',
+                                style: const TextStyle(color: Colors.white))),
                           ),
-                          child: Text('$_length', style: const TextStyle(color: Colors.white)),
-                        ),
                       ],
                     ),
-                    Slider(
-                      value: _length.toDouble(),
-                      min: 8,
-                      max: 32,
-                      divisions: 24,
-                      activeColor: Colors.white,
-                      inactiveColor: Colors.white54,
-                      label: '$_length',
-                      onChanged: (value) => setState(() => _length = value.toInt()),
-                    ),
+                    Obx(() => Slider(
+                          value: controller.length.value.toDouble(),
+                          min: 8,
+                          max: 32,
+                          divisions: 24,
+                          activeColor: Colors.white,
+                          inactiveColor: Colors.white54,
+                          label: '${controller.length.value}',
+                          onChanged: controller.updateLength,
+                        )),
                     const SizedBox(height: 10),
                     Wrap(
                       spacing: 10,
                       runSpacing: 10,
                       children: [
-                        ToggleChip(
-                          label: 'اعداد',
-                          value: _numbers,
-                          onChanged: (v) => setState(() => _numbers = v),
-                        ),
-                        ToggleChip(
-                          label: 'نمادها',
-                          value: _symbols,
-                          onChanged: (v) => setState(() => _symbols = v),
-                        ),
-                        ToggleChip(
-                          label: 'حروف کوچک',
-                          value: _lower,
-                          onChanged: (v) => setState(() => _lower = v),
-                        ),
-                        ToggleChip(
-                          label: 'حروف بزرگ',
-                          value: _upper,
-                          onChanged: (v) => setState(() => _upper = v),
-                        ),
+                        Obx(() => ToggleChip(
+                              label: 'اعداد',
+                              value: controller.numbers.value,
+                              onChanged: (v) => controller.toggleNumbers(v),
+                            )),
+                        Obx(() => ToggleChip(
+                              label: 'نمادها',
+                              value: controller.symbols.value,
+                              onChanged: (v) => controller.toggleSymbols(v),
+                            )),
+                        Obx(() => ToggleChip(
+                              label: 'حروف کوچک',
+                              value: controller.lower.value,
+                              onChanged: (v) => controller.toggleLower(v),
+                            )),
+                        Obx(() => ToggleChip(
+                              label: 'حروف بزرگ',
+                              value: controller.upper.value,
+                              onChanged: (v) => controller.toggleUpper(v),
+                            )),
                       ],
                     ),
                     const SizedBox(height: 18),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
-                        onPressed: _generate,
+                        onPressed: controller.generate,
                         icon: const Icon(Icons.refresh_rounded),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,

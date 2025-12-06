@@ -1,51 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controllers/auth_controller.dart';
-import '../routes/app_routes.dart';
+import '../controllers/lock_controller.dart';
 
-class LockScreen extends StatefulWidget {
+class LockScreen extends GetView<LockController> {
   const LockScreen({super.key});
 
   @override
-  State<LockScreen> createState() => _LockScreenState();
-}
-
-class _LockScreenState extends State<LockScreen> {
-  final TextEditingController _pinController = TextEditingController();
-  final auth = Get.find<AuthController>();
-  late final Worker _authWorker;
-
-  @override
-  void initState() {
-    super.initState();
-    _authWorker = ever<bool>(auth.isAuthenticated, (authed) {
-      if (authed) {
-        Get.offAllNamed(Routes.root);
-      }
-    });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      auth.tryAutoBiometric();
-    });
-  }
-
-  Future<void> _submit() async {
-    await auth.validatePin(_pinController.text.trim());
-  }
-
-  Future<void> _biometric() async {
-    await auth.authenticateWithBiometrics();
-  }
-
-  @override
-  void dispose() {
-    _authWorker.dispose();
-    _pinController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final auth = controller.auth;
     return Scaffold(
       backgroundColor: const Color(0xfff5f6fb),
       body: SafeArea(
@@ -69,7 +32,7 @@ class _LockScreenState extends State<LockScreen> {
                       const Text('برای ورود، رمز عبور خود را وارد کنید یا از اثر انگشت استفاده کنید'),
                       const SizedBox(height: 32),
                       TextField(
-                        controller: _pinController,
+                        controller: controller.pinController,
                         obscureText: true,
                         keyboardType: TextInputType.number,
                         maxLength: 4,
@@ -80,7 +43,7 @@ class _LockScreenState extends State<LockScreen> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        onSubmitted: (_) => _submit(),
+                        onSubmitted: (_) => controller.submitPin(),
                       ),
                       const SizedBox(height: 12),
                       Obx(() => Text(
@@ -91,7 +54,7 @@ class _LockScreenState extends State<LockScreen> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: _submit,
+                          onPressed: controller.submitPin,
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 14),
                             backgroundColor: const Color(0xff5169f6),
@@ -109,8 +72,9 @@ class _LockScreenState extends State<LockScreen> {
                             child: SizedBox(
                               width: double.infinity,
                               child: OutlinedButton.icon(
-                                onPressed:
-                                    auth.biometricEnabled.value ? _biometric : null,
+                                onPressed: auth.biometricEnabled.value
+                                    ? controller.authenticateBiometric
+                                    : null,
                                 icon: const Icon(Icons.fingerprint),
                                 label: const Text('ورود با بیومتریک'),
                               ),

@@ -7,18 +7,16 @@ import 'home/home_screen.dart';
 import 'lock_screen.dart';
 import 'setup_pin_screen.dart';
 
-class RootRouter extends StatelessWidget {
+class RootRouter extends GetView<AuthController> {
   const RootRouter({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final auth = Get.find<AuthController>();
-
     return Obx(() {
-      if (!auth.hasPin.value) {
+      if (!controller.hasPin.value) {
         return const SetupPinScreen();
       }
-      if (!auth.isAuthenticated.value) {
+      if (!controller.isAuthenticated.value) {
         return const LockScreen();
       }
       return const HomeScreen();

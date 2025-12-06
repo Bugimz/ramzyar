@@ -2,69 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import '../controllers/password_controller.dart';
+import '../controllers/password_form_controller.dart';
 import '../models/password_entry.dart';
 
-class AddEditPasswordScreen extends StatefulWidget {
+class AddEditPasswordScreen extends GetView<PasswordFormController> {
   AddEditPasswordScreen({super.key, this.entry});
 
   final PasswordEntry? entry;
 
   @override
-  State<AddEditPasswordScreen> createState() => _AddEditPasswordScreenState();
-}
-
-class _AddEditPasswordScreenState extends State<AddEditPasswordScreen> {
-  final passwordController = Get.find<PasswordController>();
-  final _titleController = TextEditingController();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _websiteController = TextEditingController();
-  final _notesController = TextEditingController();
-  bool _showPassword = false;
-
-  @override
-  void initState() {
-    super.initState();
-    final entry = widget.entry ?? Get.arguments as PasswordEntry?;
-    if (entry != null) {
-      _titleController.text = entry.title;
-      _usernameController.text = entry.username;
-      _passwordController.text = entry.password;
-      _websiteController.text = entry.website ?? '';
-      _notesController.text = entry.notes ?? '';
-    }
-  }
-
-  Future<void> _save() async {
-    if (_titleController.text.trim().isEmpty ||
-        _usernameController.text.trim().isEmpty ||
-        _passwordController.text.trim().isEmpty) {
-      Get.snackbar('خطا', 'عنوان، نام کاربری و رمز عبور الزامی است');
-      return;
-    }
-
-    final entry = PasswordEntry(
-      id: widget.entry?.id,
-      title: _titleController.text.trim(),
-      username: _usernameController.text.trim(),
-      password: _passwordController.text.trim(),
-      website: _websiteController.text.trim().isEmpty ? null : _websiteController.text.trim(),
-      notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
-      createdAt: widget.entry?.createdAt,
-    );
-
-    if (widget.entry == null) {
-      await passwordController.addEntry(entry);
-    } else {
-      await passwordController.updateEntry(entry);
-    }
-    Get.back();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final isEditing = widget.entry != null;
+    if (entry != null && controller.entry == null) {
+      controller.entry = entry;
+      controller.titleController.text = entry!.title;
+      controller.usernameController.text = entry!.username;
+      controller.passwordController.text = entry!.password;
+      controller.websiteController.text = entry!.website ?? '';
+      controller.notesController.text = entry!.notes ?? '';
+    }
+    final isEditing = controller.isEditing || entry != null;
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     final scaffold = Theme.of(context).scaffoldBackgroundColor;
@@ -179,38 +135,41 @@ class _AddEditPasswordScreenState extends State<AddEditPasswordScreen> {
                               ),
                               const SizedBox(height: 18),
                               _Field(
-                                controller: _titleController,
+                                controller: controller.titleController,
                                 label: 'عنوان',
                                 hint: 'مثلاً: حساب ایمیل کاری',
                                 prefixIcon: Icons.badge_outlined,
                                 autofillHints: const [AutofillHints.name],
                               ),
                               _Field(
-                                controller: _usernameController,
+                                controller: controller.usernameController,
                                 label: 'نام کاربری / ایمیل',
                                 hint: 'user@company.com',
                                 prefixIcon: Icons.person_outline,
                                 autofillHints: const [AutofillHints.username, AutofillHints.email],
                               ),
-                              _PasswordField(
-                                controller: _passwordController,
-                                showPassword: _showPassword,
-                                onToggle: () => setState(() => _showPassword = !_showPassword),
-                                onGenerate: () {
-                                  final generated = passwordController.generatePassword();
-                                  _passwordController.text = generated;
-                                  Clipboard.setData(ClipboardData(text: generated));
-                                  Get.snackbar('رمز قوی تولید شد', 'در کلیپ‌بورد نیز کپی شد');
-                                },
-                              ),
+                              Obx(() => _PasswordField(
+                                    controller: controller.passwordController,
+                                    showPassword: controller.showPassword.value,
+                                    onToggle: controller.showPassword.toggle,
+                                    onGenerate: () {
+                                      final generated =
+                                          controller.passwords.generatePassword();
+                                      controller.passwordController.text = generated;
+                                      Clipboard.setData(
+                                          ClipboardData(text: generated));
+                                      Get.snackbar(
+                                          'رمز قوی تولید شد', 'در کلیپ‌بورد نیز کپی شد');
+                                    },
+                                  )),
                               _Field(
-                                controller: _websiteController,
+                                controller: controller.websiteController,
                                 label: 'وبسایت (اختیاری)',
                                 hint: 'https://example.com',
                                 prefixIcon: Icons.link_outlined,
                               ),
                               _Field(
-                                controller: _notesController,
+                                controller: controller.notesController,
                                 label: 'توضیحات',
                                 hint: 'نکات امنیتی یا سؤالات بازیابی',
                                 maxLines: 3,

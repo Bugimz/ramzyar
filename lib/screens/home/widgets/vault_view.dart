@@ -8,10 +8,10 @@ import 'header_card.dart';
 import 'search_card.dart';
 import 'vault_list.dart';
 
-class VaultView extends StatelessWidget {
-  const VaultView({super.key, required this.controller, required this.auth});
-  final PasswordController controller;
-  final AuthController auth;
+class VaultView extends GetView<PasswordController> {
+  const VaultView({super.key});
+
+  AuthController get auth => Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {

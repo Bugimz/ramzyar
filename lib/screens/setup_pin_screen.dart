@@ -1,41 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controllers/auth_controller.dart';
+import '../controllers/setup_pin_controller.dart';
 
-class SetupPinScreen extends StatefulWidget {
+class SetupPinScreen extends GetView<SetupPinController> {
   const SetupPinScreen({super.key});
-
-  @override
-  State<SetupPinScreen> createState() => _SetupPinScreenState();
-}
-
-class _SetupPinScreenState extends State<SetupPinScreen> {
-  final TextEditingController _pinController = TextEditingController();
-  final TextEditingController _confirmController = TextEditingController();
-  final auth = Get.find<AuthController>();
-  bool _saving = false;
-  String? _error;
-  bool _showPin = false;
-  bool _showConfirm = false;
-
-  Future<void> _savePin() async {
-    final pin = _pinController.text.trim();
-    final confirm = _confirmController.text.trim();
-
-    if (pin.length < 4) {
-      setState(() => _error = 'حداقل چهار رقم وارد کنید');
-      return;
-    }
-    if (pin != confirm) {
-      setState(() => _error = 'رمزها یکسان نیستند');
-      return;
-    }
-
-    setState(() => _saving = true);
-    await auth.setPin(pin);
-    setState(() => _saving = false);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -155,30 +124,37 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                                     ],
                                   ),
                                   const SizedBox(height: 28),
-                                  _PinField(
-                                    controller: _pinController,
-                                    label: 'رمز عبور',
-                                    showText: _showPin,
-                                    onToggleVisibility: () =>
-                                        setState(() => _showPin = !_showPin),
-                                  ),
+                                  Obx(() => _PinField(
+                                        controller: controller.pinController,
+                                        label: 'رمز عبور',
+                                        showText: controller.showPin.value,
+                                        onToggleVisibility:
+                                            controller.showPin.toggle,
+                                      )),
                                   const SizedBox(height: 14),
-                                  _PinField(
-                                    controller: _confirmController,
-                                    label: 'تکرار رمز عبور',
-                                    showText: _showConfirm,
-                                    onToggleVisibility: () =>
-                                        setState(() => _showConfirm = !_showConfirm),
-                                  ),
+                                  Obx(() => _PinField(
+                                        controller:
+                                            controller.confirmController,
+                                        label: 'تکرار رمز عبور',
+                                        showText: controller.showConfirm.value,
+                                        onToggleVisibility:
+                                            controller.showConfirm.toggle,
+                                      )),
                                   const SizedBox(height: 10),
-                                  if (_error != null)
-                                    Padding(
-                                      padding: const EdgeInsets.only(bottom: 8),
+                                  Obx(() {
+                                    final error = controller.error.value;
+                                    if (error == null) {
+                                      return const SizedBox.shrink();
+                                    }
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 8),
                                       child: Text(
-                                        _error!,
+                                        error,
                                         style: const TextStyle(color: Colors.red),
                                       ),
-                                    ),
+                                    );
+                                  }),
                                   const Spacer(),
                                   Row(
                                     children: [
@@ -195,34 +171,43 @@ class _SetupPinScreenState extends State<SetupPinScreen> {
                                   const SizedBox(height: 16),
                                   SizedBox(
                                     width: double.infinity,
-                                    child: ElevatedButton.icon(
-                                      onPressed: _saving ? null : _savePin,
-                                      icon: _saving
-                                          ? const SizedBox(
-                                              height: 16,
-                                              width: 16,
-                                              child: CircularProgressIndicator(
-                                                strokeWidth: 2.2,
-                                                color: Colors.white,
-                                              ),
-                                            )
-                                          : const Icon(Icons.check_circle_outline),
-                                      label: Padding(
-                                        padding:
-                                            const EdgeInsets.symmetric(vertical: 12.0),
-                                        child: Text(
-                                          _saving ? 'در حال ذخیره...' : 'تأیید و ادامه',
-                                          style: textTheme.titleSmall?.copyWith(color: Colors.white),
+                                    child: Obx(() {
+                                      final saving = controller.saving.value;
+                                      return ElevatedButton.icon(
+                                        onPressed:
+                                            saving ? null : controller.savePin,
+                                        icon: saving
+                                            ? const SizedBox(
+                                                height: 16,
+                                                width: 16,
+                                                child: CircularProgressIndicator(
+                                                  strokeWidth: 2.2,
+                                                  color: Colors.white,
+                                                ),
+                                              )
+                                            : const Icon(
+                                                Icons.check_circle_outline),
+                                        label: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 12.0),
+                                          child: Text(
+                                            saving
+                                                ? 'در حال ذخیره...'
+                                                : 'تأیید و ادامه',
+                                            style: textTheme.titleSmall?.copyWith(
+                                                color: Colors.white),
+                                          ),
                                         ),
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: colorScheme.primary,
-                                        foregroundColor: colorScheme.onPrimary,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(14),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: colorScheme.primary,
+                                          foregroundColor:
+                                              colorScheme.onPrimary,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(14),
+                                          ),
                                         ),
-                                      ),
-                                    ),
+                                      );
+                                    }),
                                   ),
                                 ],
                               ),

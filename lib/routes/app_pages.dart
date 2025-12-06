@@ -1,6 +1,9 @@
 import 'package:get/get.dart';
 
-import '../bindings/initial_binding.dart';
+import '../bindings/home_binding.dart';
+import '../bindings/lock_binding.dart';
+import '../bindings/password_form_binding.dart';
+import '../bindings/setup_pin_binding.dart';
 import '../screens/add_edit_password_screen.dart';
 import '../screens/help_screen.dart';
 import '../screens/home/home_screen.dart';
@@ -14,14 +17,32 @@ class AppPages {
     GetPage(
       name: Routes.root,
       page: () => const RootRouter(),
-      binding: InitialBinding(),
+      bindings: [
+        SetupPinBinding(),
+        LockBinding(),
+        HomeBinding(),
+        PasswordFormBinding(),
+      ],
     ),
-    GetPage(name: Routes.setupPin, page: () => const SetupPinScreen()),
-    GetPage(name: Routes.lock, page: () => const LockScreen()),
-    GetPage(name: Routes.home, page: () => const HomeScreen()),
+    GetPage(
+      name: Routes.setupPin,
+      page: () => const SetupPinScreen(),
+      binding: SetupPinBinding(),
+    ),
+    GetPage(
+      name: Routes.lock,
+      page: () => const LockScreen(),
+      binding: LockBinding(),
+    ),
+    GetPage(
+      name: Routes.home,
+      page: () => const HomeScreen(),
+      binding: HomeBinding(),
+    ),
     GetPage(
       name: Routes.addEditPassword,
       page: () => AddEditPasswordScreen(),
+      binding: PasswordFormBinding(),
     ),
     GetPage(name: Routes.help, page: () => const HelpScreen()),
   ];
