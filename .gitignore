@@ -43,3 +43,10 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Legacy screen files (kept out after MVC refactor)
+/lib/screens/add_edit_password_screen.dart
+/lib/screens/home_screen.dart
+/lib/screens/lock_screen.dart
+/lib/screens/help_screen.dart
+/lib/screens/setup_pin_screen.dart
