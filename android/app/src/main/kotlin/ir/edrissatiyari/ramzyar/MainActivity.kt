@@ -2,11 +2,13 @@ package ir.edrissatiyari.ramzyar
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
 import android.view.WindowManager
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import io.flutter.embedding.android.FlutterFragmentActivity
@@ -17,6 +19,7 @@ class MainActivity : FlutterFragmentActivity() {
     private val backgroundChannel = "ramzyar/background"
     private val autofillChannel = "ramzyar/autofill"
     private val securityChannel = "ramzyar/security"
+    private val permissionsChannel = "ramzyar/permissions"
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -63,6 +66,16 @@ class MainActivity : FlutterFragmentActivity() {
                         val enabled = call.argument<Boolean>("enabled") ?: false
                         setSecureWindow(enabled)
                         result.success(true)
+                    }
+                    else -> result.notImplemented()
+                }
+            }
+
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, permissionsChannel)
+            .setMethodCallHandler { call, result ->
+                when (call.method) {
+                    "requestSms" -> {
+                        requestSmsPermission(result)
                     }
                     else -> result.notImplemented()
                 }
@@ -119,5 +132,31 @@ class MainActivity : FlutterFragmentActivity() {
                 window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
             }
         }
+    }
+
+    private fun requestSmsPermission(result: MethodChannel.Result) {
+        val receiveGranted = ContextCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.RECEIVE_SMS
+        ) == PackageManager.PERMISSION_GRANTED
+        val readGranted = ContextCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.READ_SMS
+        ) == PackageManager.PERMISSION_GRANTED
+
+        if (receiveGranted && readGranted) {
+            result.success(true)
+            return
+        }
+
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(
+                android.Manifest.permission.RECEIVE_SMS,
+                android.Manifest.permission.READ_SMS
+            ),
+            102
+        )
+        result.success(false)
     }
 }

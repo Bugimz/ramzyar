@@ -10,6 +10,7 @@ import '../models/password_entry.dart';
 import '../services/db_service.dart';
 import '../services/background_monitor_service.dart';
 import '../services/autofill_bridge.dart';
+import '../services/permissions_service.dart';
 
 class PasswordController extends GetxController {
   final DbService _dbService = DbService();
@@ -104,6 +105,7 @@ class PasswordController extends GetxController {
     _clipboardTimer?.cancel();
     _clipboardTimer = null;
     if (enabled) {
+      PermissionsService.ensureSmsPermission();
       BackgroundMonitorService.ensureRunning(requestBatteryExemption: true);
       _clipboardTimer = Timer.periodic(const Duration(seconds: 8), (_) async {
         await _checkClipboardForCredentials();
