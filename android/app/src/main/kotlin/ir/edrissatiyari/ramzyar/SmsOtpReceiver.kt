@@ -5,7 +5,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.telephony.Telephony
+import android.provider.Telephony
 import android.widget.Toast
 
 class SmsOtpReceiver : BroadcastReceiver() {
