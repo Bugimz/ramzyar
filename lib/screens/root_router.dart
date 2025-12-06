@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import '../controllers/auth_controller.dart';
 import '../routes/app_routes.dart';
 import 'home/home_screen.dart';
-import 'lock_screen.dart';
-import 'setup_pin_screen.dart';
+import 'lock/lock_screen.dart';
+import 'setup_pin/setup_pin_screen.dart';
 
 class RootRouter extends GetView<AuthController> {
   const RootRouter({super.key});

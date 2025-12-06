@@ -1,15 +1,16 @@
 import 'package:get/get.dart';
 
+import '../bindings/help_binding.dart';
 import '../bindings/home_binding.dart';
 import '../bindings/lock_binding.dart';
 import '../bindings/password_form_binding.dart';
 import '../bindings/setup_pin_binding.dart';
-import '../screens/add_edit_password_screen.dart';
-import '../screens/help_screen.dart';
+import '../screens/help/help_screen.dart';
 import '../screens/home/home_screen.dart';
-import '../screens/lock_screen.dart';
+import '../screens/lock/lock_screen.dart';
+import '../screens/password_form/password_form_screen.dart';
 import '../screens/root_router.dart';
-import '../screens/setup_pin_screen.dart';
+import '../screens/setup_pin/setup_pin_screen.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -44,6 +45,10 @@ class AppPages {
       page: () => AddEditPasswordScreen(),
       binding: PasswordFormBinding(),
     ),
-    GetPage(name: Routes.help, page: () => const HelpScreen()),
+    GetPage(
+      name: Routes.help,
+      page: () => const HelpScreen(),
+      binding: HelpBinding(),
+    ),
   ];
 }
