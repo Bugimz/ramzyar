@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../controllers/auth_controller.dart';
-import '../../../models/password_entry.dart';
-import '../../../routes/app_routes.dart';
-import 'security_sheet.dart';
+import '../../../../controllers/auth_controller.dart';
+import '../../../../models/password_entry.dart';
+import '../../../../routes/app_routes.dart';
+import '../common/action_button.dart';
+import '../settings/security_sheet.dart';
 
 class HeaderCard extends StatelessWidget {
   const HeaderCard({
@@ -220,10 +221,9 @@ class _CompactActions extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _SmallIconButton(
+          SmallIconButton(
             icon: Icons.tune_rounded,
             tooltip: 'تنظیمات',
-            colorScheme: colorScheme,
             onTap: () {
               Get.bottomSheet(
                 const SecuritySheet(),
@@ -240,48 +240,15 @@ class _CompactActions extends StatelessWidget {
             height: 20,
             color: colorScheme.outlineVariant.withOpacity(0.5),
           ),
-          _SmallIconButton(
+          SmallIconButton(
             icon: Icons.lock_rounded,
             tooltip: 'قفل',
-            colorScheme: colorScheme,
             onTap: () {
               auth.lockApp();
               Get.offAllNamed(Routes.lock);
             },
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _SmallIconButton extends StatelessWidget {
-  const _SmallIconButton({
-    required this.icon,
-    required this.tooltip,
-    required this.colorScheme,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String tooltip;
-  final ColorScheme colorScheme;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Tooltip(
-      message: tooltip,
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(8),
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Icon(icon, size: 18, color: colorScheme.onSurfaceVariant),
-          ),
-        ),
       ),
     );
   }
