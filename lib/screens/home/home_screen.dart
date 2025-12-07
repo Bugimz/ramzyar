@@ -46,18 +46,6 @@ class HomeScreen extends GetView<HomeController> {
                       GeneratorView(maxWidth: constraints.maxWidth),
                     ],
                   ),
-                  
-                  // Floating Action Button - Custom positioned
-                  if (isVaultTab)
-                    Positioned(
-                      bottom: 90,
-                      left: 24,
-                      child: _AnimatedFAB(
-                        colorScheme: colorScheme,
-                        isDark: isDark,
-                        onPressed: () => Get.toNamed(Routes.addEditPassword),
-                      ),
-                    ),
                 ],
               );
             },
