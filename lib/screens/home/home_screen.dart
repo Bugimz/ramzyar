@@ -35,12 +35,29 @@ class HomeScreen extends GetView<HomeController> {
           bottom: false,
           child: LayoutBuilder(
             builder: (context, constraints) {
-              return TabBarView(
-                controller: controller.tabController,
-                physics: const NeverScrollableScrollPhysics(),
+              return Stack(
                 children: [
-                  const VaultView(),
-                  GeneratorView(maxWidth: constraints.maxWidth),
+                  // Tab Content
+                  TabBarView(
+                    controller: controller.tabController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      const VaultView(),
+                      GeneratorView(maxWidth: constraints.maxWidth),
+                    ],
+                  ),
+                  
+                  // Floating Action Button - Custom positioned
+                  if (isVaultTab)
+                    Positioned(
+                      bottom: 90,
+                      left: 24,
+                      child: _AnimatedFAB(
+                        colorScheme: colorScheme,
+                        isDark: isDark,
+                        onPressed: () => Get.toNamed(Routes.addEditPassword),
+                      ),
+                    ),
                 ],
               );
             },
