@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 
 class SecurityTip extends StatelessWidget {
-  const SecurityTip({super.key, required this.colorScheme, required this.textTheme});
-
-  final ColorScheme colorScheme;
-  final TextTheme textTheme;
+  const SecurityTip({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: colorScheme.secondaryContainer.withOpacity(0.3),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: colorScheme.secondary.withOpacity(0.2),
-        ),
+        border: Border.all(color: colorScheme.secondary.withOpacity(0.2)),
       ),
       child: Row(
         children: [

@@ -7,40 +7,32 @@ class ToggleChip extends StatelessWidget {
     required this.icon,
     required this.value,
     required this.onChanged,
-    required this.colorScheme,
   });
 
   final String label;
   final IconData icon;
   final bool value;
   final ValueChanged<bool> onChanged;
-  final ColorScheme colorScheme;
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return InkWell(
       borderRadius: BorderRadius.circular(16),
       onTap: () => onChanged(!value),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
-        curve: Curves.easeInOut,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           gradient: value
               ? LinearGradient(
                   colors: [colorScheme.primary, colorScheme.secondary],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
                 )
               : null,
           color: value ? null : colorScheme.surfaceVariant,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: value
-                ? colorScheme.primary.withOpacity(0.3)
-                : colorScheme.outlineVariant,
-            width: value ? 0 : 1.5,
-          ),
+          border: value ? null : Border.all(color: colorScheme.outlineVariant),
           boxShadow: value
               ? [
                   BoxShadow(

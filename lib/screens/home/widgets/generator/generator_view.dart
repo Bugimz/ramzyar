@@ -2,27 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../controllers/generator_controller.dart';
-import 'length_slider.dart';
 import 'password_display.dart';
-import 'security_tip.dart';
+import 'length_slider.dart';
 import 'toggle_chip.dart';
+import 'security_tip.dart';
 
 class GeneratorView extends GetView<GeneratorController> {
   const GeneratorView({super.key, required this.maxWidth});
+
   final double maxWidth;
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     final isWide = maxWidth > 900;
-    final isTablet = maxWidth > 700 && maxWidth <= 900;
+    final isTablet = maxWidth > 700;
     final horizontalPadding = isWide
         ? 32.0
         : isTablet
             ? 24.0
             : 16.0;
-    final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Align(
       alignment: Alignment.topCenter,
@@ -39,12 +41,12 @@ class GeneratorView extends GetView<GeneratorController> {
             children: [
               Container(
                 width: double.infinity,
+                padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
                   color: colorScheme.surface,
                   borderRadius: BorderRadius.circular(28),
                   border: Border.all(
                     color: colorScheme.primary.withOpacity(0.2),
-                    width: 1,
                   ),
                   boxShadow: [
                     BoxShadow(
@@ -54,10 +56,10 @@ class GeneratorView extends GetView<GeneratorController> {
                     ),
                   ],
                 ),
-                padding: const EdgeInsets.all(24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Header
                     Row(
                       children: [
                         Container(
@@ -68,17 +70,8 @@ class GeneratorView extends GetView<GeneratorController> {
                                 colorScheme.primary,
                                 colorScheme.secondary,
                               ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
                             ),
                             borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                color: colorScheme.primary.withOpacity(0.3),
-                                blurRadius: 12,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
                           ),
                           child: Icon(
                             Icons.password_rounded,
@@ -97,7 +90,6 @@ class GeneratorView extends GetView<GeneratorController> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              const SizedBox(height: 2),
                               Text(
                                 'تولید رمزهای امن و تصادفی',
                                 style: textTheme.bodyMedium?.copyWith(
@@ -110,18 +102,16 @@ class GeneratorView extends GetView<GeneratorController> {
                       ],
                     ),
                     const SizedBox(height: 24),
-                    PasswordDisplay(
-                      controller: controller,
-                      colorScheme: colorScheme,
-                      textTheme: textTheme,
-                    ),
+
+                    // Password Display
+                    const PasswordDisplay(),
                     const SizedBox(height: 28),
-                    LengthSlider(
-                      controller: controller,
-                      colorScheme: colorScheme,
-                      textTheme: textTheme,
-                    ),
+
+                    // Length Slider
+                    const LengthSlider(),
                     const SizedBox(height: 24),
+
+                    // Options
                     Text(
                       'تنظیمات رمز عبور',
                       style: textTheme.titleSmall?.copyWith(
@@ -130,6 +120,7 @@ class GeneratorView extends GetView<GeneratorController> {
                       ),
                     ),
                     const SizedBox(height: 12),
+
                     Wrap(
                       spacing: 10,
                       runSpacing: 10,
@@ -140,7 +131,6 @@ class GeneratorView extends GetView<GeneratorController> {
                             icon: Icons.pin_outlined,
                             value: controller.numbers.value,
                             onChanged: controller.toggleNumbers,
-                            colorScheme: colorScheme,
                           ),
                         ),
                         Obx(
@@ -149,7 +139,6 @@ class GeneratorView extends GetView<GeneratorController> {
                             icon: Icons.tag_rounded,
                             value: controller.symbols.value,
                             onChanged: controller.toggleSymbols,
-                            colorScheme: colorScheme,
                           ),
                         ),
                         Obx(
@@ -158,7 +147,6 @@ class GeneratorView extends GetView<GeneratorController> {
                             icon: Icons.text_fields_rounded,
                             value: controller.lower.value,
                             onChanged: controller.toggleLower,
-                            colorScheme: colorScheme,
                           ),
                         ),
                         Obx(
@@ -167,12 +155,13 @@ class GeneratorView extends GetView<GeneratorController> {
                             icon: Icons.title_rounded,
                             value: controller.upper.value,
                             onChanged: controller.toggleUpper,
-                            colorScheme: colorScheme,
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 24),
+
+                    // Generate Button
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
@@ -185,8 +174,6 @@ class GeneratorView extends GetView<GeneratorController> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
-                          elevation: 0,
-                          shadowColor: colorScheme.primary.withOpacity(0.4),
                         ),
                         label: Text(
                           'تولید رمز جدید',
@@ -201,7 +188,7 @@ class GeneratorView extends GetView<GeneratorController> {
                 ),
               ),
               const SizedBox(height: 20),
-              SecurityTip(colorScheme: colorScheme, textTheme: textTheme),
+              const SecurityTip(),
             ],
           ),
         ),

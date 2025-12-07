@@ -1,23 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../../../controllers/generator_controller.dart';
-import '../common/action_button.dart';
 
-class PasswordDisplay extends StatelessWidget {
-  const PasswordDisplay({
-    super.key,
-    required this.controller,
-    required this.colorScheme,
-    required this.textTheme,
-  });
-
-  final GeneratorController controller;
-  final ColorScheme colorScheme;
-  final TextTheme textTheme;
+class PasswordDisplay extends GetView<GeneratorController> {
+  const PasswordDisplay({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Obx(() {
       final text = controller.generated.value;
       final hasPassword = text.isNotEmpty;
@@ -32,8 +26,6 @@ class PasswordDisplay extends StatelessWidget {
                     colorScheme.primaryContainer,
                     colorScheme.secondaryContainer,
                   ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
                 )
               : null,
           color: hasPassword ? null : colorScheme.surfaceVariant,
@@ -42,7 +34,6 @@ class PasswordDisplay extends StatelessWidget {
             color: hasPassword
                 ? colorScheme.primary.withOpacity(0.3)
                 : colorScheme.outlineVariant,
-            width: 1.5,
           ),
         ),
         child: Column(
@@ -63,17 +54,19 @@ class PasswordDisplay extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (hasPassword)
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12),
-                    child: CopyButton(onCopy: controller.copyToClipboard),
-                  ),
+                if (hasPassword) ...[
+                  const SizedBox(width: 12),
+                  _CopyButton(text: text, colorScheme: colorScheme),
+                ],
               ],
             ),
             if (hasPassword) ...[
               const SizedBox(height: 16),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 10,
+                ),
                 decoration: BoxDecoration(
                   color: colorScheme.primary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
@@ -102,5 +95,30 @@ class PasswordDisplay extends StatelessWidget {
         ),
       );
     });
+  }
+}
+
+class _CopyButton extends StatelessWidget {
+  const _CopyButton({required this.text, required this.colorScheme});
+
+  final String text;
+  final ColorScheme colorScheme;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.primary.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: IconButton(
+        onPressed: () async {
+          await Clipboard.setData(ClipboardData(text: text));
+          Get.snackbar('کپی شد', 'رمز در کلیپ‌بورد ذخیره شد');
+        },
+        icon: Icon(Icons.copy_rounded, color: colorScheme.primary),
+        tooltip: 'کپی',
+      ),
+    );
   }
 }

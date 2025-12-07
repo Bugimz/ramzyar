@@ -3,28 +3,20 @@ import 'package:get/get.dart';
 
 import '../../../../controllers/generator_controller.dart';
 
-class LengthSlider extends StatelessWidget {
-  const LengthSlider({
-    super.key,
-    required this.controller,
-    required this.colorScheme,
-    required this.textTheme,
-  });
-
-  final GeneratorController controller;
-  final ColorScheme colorScheme;
-  final TextTheme textTheme;
+class LengthSlider extends GetView<GeneratorController> {
+  const LengthSlider({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: colorScheme.surfaceVariant.withOpacity(0.5),
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: colorScheme.outlineVariant.withOpacity(0.5),
-        ),
+        border: Border.all(color: colorScheme.outlineVariant.withOpacity(0.5)),
       ),
       child: Column(
         children: [
@@ -55,21 +47,9 @@ class LengthSlider extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [
-                        colorScheme.primary,
-                        colorScheme.secondary,
-                      ],
+                      colors: [colorScheme.primary, colorScheme.secondary],
                     ),
                     borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: colorScheme.primary.withOpacity(
-                          0.3,
-                        ),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
                   ),
                   child: Text(
                     '${controller.length.value} کاراکتر',
@@ -90,9 +70,7 @@ class LengthSlider extends StatelessWidget {
                 inactiveTrackColor: colorScheme.primary.withOpacity(0.2),
                 thumbColor: colorScheme.primary,
                 overlayColor: colorScheme.primary.withOpacity(0.2),
-                thumbShape: const RoundSliderThumbShape(
-                  enabledThumbRadius: 10,
-                ),
+                thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
                 trackHeight: 6,
               ),
               child: Slider(
