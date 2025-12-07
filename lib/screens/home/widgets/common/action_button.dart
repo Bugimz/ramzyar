@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 enum ActionButtonSize { small, medium, large }
+
 enum ActionButtonVariant { filled, tonal, outlined, ghost }
 
 class ActionButton extends StatelessWidget {
@@ -62,10 +63,7 @@ class ActionButton extends StatelessWidget {
         ? SizedBox(
             width: iconSize,
             height: iconSize,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              color: iconColor,
-            ),
+            child: CircularProgressIndicator(strokeWidth: 2, color: iconColor),
           )
         : Icon(icon, size: iconSize, color: iconColor);
 
@@ -91,59 +89,12 @@ class ActionButton extends StatelessWidget {
     if (tooltip != null) {
       return Tooltip(message: tooltip!, child: button);
     }
-
-    return button;
-  }
-}
-
-class SmallIconButton extends StatelessWidget {
-  const SmallIconButton({
-    super.key,
-    required this.icon,
-    required this.onTap,
-    this.tooltip,
-    this.color,
-  });
-
-  final IconData icon;
-  final VoidCallback onTap;
-  final String? tooltip;
-  final Color? color;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    Widget button = Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Icon(
-            icon,
-            size: 18,
-            color: color ?? colorScheme.onSurfaceVariant,
-          ),
-        ),
-      ),
-    );
-
-    if (tooltip != null) {
-      return Tooltip(message: tooltip!, child: button);
-    }
-
     return button;
   }
 }
 
 class CopyButton extends StatefulWidget {
-  const CopyButton({
-    super.key,
-    required this.onCopy,
-    this.size = 18,
-  });
+  const CopyButton({super.key, required this.onCopy, this.size = 18});
 
   final VoidCallback onCopy;
   final double size;
