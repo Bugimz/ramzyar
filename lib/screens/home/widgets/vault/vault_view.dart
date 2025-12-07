@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../controllers/auth_controller.dart';
-import '../../../controllers/password_controller.dart';
-import 'auto_prompt_card.dart';
-import 'header_card.dart';
-import 'search_card.dart';
+import '../../../../controllers/auth_controller.dart';
+import '../../../../controllers/password_controller.dart';
+import '../auto_prompt_card.dart';
+import '../header/header_card.dart';
+import '../search_card.dart';
 import 'vault_list.dart';
 
 class VaultView extends GetView<PasswordController> {

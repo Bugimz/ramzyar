@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 
-import '../../../controllers/password_controller.dart';
+import '../../../../controllers/password_controller.dart';
 import '../../../models/password_entry.dart';
 import '../../../routes/app_routes.dart';
 
