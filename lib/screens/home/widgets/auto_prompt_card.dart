@@ -4,7 +4,11 @@ import 'package:get/get.dart';
 import '../../../controllers/password_controller.dart';
 
 class AutoPromptCard extends StatelessWidget {
-  const AutoPromptCard({super.key, this.isWide = false});
+  const AutoPromptCard({
+    super.key,
+    this.isWide = false,
+    required PasswordController controller,
+  });
 
   final bool isWide;
 

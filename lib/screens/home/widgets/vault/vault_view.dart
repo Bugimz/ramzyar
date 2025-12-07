@@ -18,13 +18,17 @@ class VaultView extends GetView<PasswordController> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final isWide = constraints.maxWidth > 900;
-        final isTablet = constraints.maxWidth > 700 && constraints.maxWidth <= 900;
+        final isTablet =
+            constraints.maxWidth > 700 && constraints.maxWidth <= 900;
         final horizontalPadding = isWide
             ? 32.0
             : isTablet
                 ? 24.0
                 : 16.0;
-        final gradientHeight = (constraints.maxHeight * 0.32).clamp(220.0, 360.0);
+        final gradientHeight = (constraints.maxHeight * 0.32).clamp(
+          220.0,
+          360.0,
+        );
 
         final gradientTop = Container(
           height: gradientHeight,
@@ -41,23 +45,34 @@ class VaultView extends GetView<PasswordController> {
           children: [
             gradientTop,
             SingleChildScrollView(
-              padding: EdgeInsets.fromLTRB(horizontalPadding, 16, horizontalPadding, 120),
+              padding: EdgeInsets.fromLTRB(
+                horizontalPadding,
+                16,
+                horizontalPadding,
+                120,
+              ),
               child: Center(
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 1100),
                   child: Column(
                     children: [
-                      GetX<PasswordController>(builder: (ctrl) {
-                        final entries = ctrl.entries;
-                        return HeaderCard(
-                          auth: auth,
-                          total: entries.length,
-                          recent: entries.take(3).toList(),
-                          isWide: isWide,
-                        );
-                      }),
+                      GetX<PasswordController>(
+                        builder: (ctrl) {
+                          final entries = ctrl.entries;
+                          return HeaderCard(
+                            auth: auth,
+                            total: entries.length,
+                            recent: entries.take(3).toList(),
+                            isWide: isWide,
+                          );
+                        },
+                      ),
                       const SizedBox(height: 12),
-                      SearchCard(onChanged: (value) => controller.searchTerm.value = value, dense: isWide),
+                      SearchCard(
+                        onChanged: (value) =>
+                            controller.searchTerm.value = value,
+                        dense: isWide,
+                      ),
                       const SizedBox(height: 12),
                       AutoPromptCard(controller: controller, isWide: isWide),
                       const SizedBox(height: 8),
