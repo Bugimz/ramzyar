@@ -24,13 +24,15 @@ class _FloatingAddButtonState extends State<FloatingAddButton>
       vsync: this,
     )..repeat(reverse: true);
 
-    _scaleAnim = Tween<double>(begin: 1.0, end: 1.05).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _scaleAnim = Tween<double>(
+      begin: 1.0,
+      end: 1.05,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
-    _glowAnim = Tween<double>(begin: 0.3, end: 0.5).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _glowAnim = Tween<double>(
+      begin: 0.3,
+      end: 0.5,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ramzyar/screens/home/widgets/settings/setting_tiles.dart';
 
 import '../../../../controllers/auth_controller.dart';
 import '../../../../controllers/theme_controller.dart';
-import '../../../routes/app_routes.dart';
+import '../../../../routes/app_routes.dart';
 
 class SecuritySheet extends StatelessWidget {
   const SecuritySheet({super.key});
@@ -12,82 +13,113 @@ class SecuritySheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final auth = Get.find<AuthController>();
     final theme = Get.find<ThemeController>();
-    const lockOptions = [1, 3, 5, 10, 30];
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Handle
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: colorScheme.outlineVariant,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Header
             Row(
               children: [
-                const Icon(Icons.security_outlined, color: Color(0xff5169f6)),
-                const SizedBox(width: 8),
-                const Text('تنظیمات امنیتی',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                const Spacer(),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [colorScheme.primary, colorScheme.secondary],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Icons.settings_rounded,
+                    color: colorScheme.onPrimary,
+                    size: 22,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'تنظیمات',
+                        style: textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        'امنیت و ظاهر برنامه',
+                        style: textTheme.bodySmall?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 IconButton(
-                  icon: const Icon(Icons.close),
+                  icon: const Icon(Icons.close_rounded),
                   onPressed: () => Get.back(),
                 ),
               ],
             ),
-            const SizedBox(height: 12),
-            const Text('زمان قفل خودکار', style: TextStyle(fontWeight: FontWeight.w600)),
-            const SizedBox(height: 8),
-            Obx(
-              () => Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: lockOptions
-                    .map(
-                      (m) => ChoiceChip(
-                        label: Text('$m دقیقه'),
-                        selected: auth.autoLockMinutes.value == m,
-                        onSelected: (_) => auth.setAutoLockMinutes(m),
-                      ),
-                    )
-                    .toList(),
-              ),
-            ),
+            const SizedBox(height: 24),
+
+            // Auto Lock Options
+            LockOptionsSection(auth: auth),
             const SizedBox(height: 16),
+
+            // Toggle Tiles
             Obx(
-              () => SwitchListTile(
-                contentPadding: EdgeInsets.zero,
+              () => ToggleTile(
+                icon: Icons.dark_mode_outlined,
+                title: 'حالت تاریک',
+                subtitle: 'تم شب برای کاهش نور',
                 value: theme.themeMode.value == ThemeMode.dark,
                 onChanged: theme.toggleDark,
-                title: const Text('حالت شب'),
-                subtitle: const Text('کاهش نور و استفاده از رنگ‌های تیره برای شب'),
               ),
             ),
             const SizedBox(height: 8),
             Obx(
-              () => SwitchListTile(
-                contentPadding: EdgeInsets.zero,
+              () => ToggleTile(
+                icon: Icons.screenshot_monitor_outlined,
+                title: 'محافظت از صفحه',
+                subtitle: 'جلوگیری از اسکرین‌شات',
                 value: auth.screenSecureEnabled.value,
-                onChanged: (val) => auth.toggleScreenSecure(val),
-                title: const Text('محدودیت اسکرین‌شات'),
-                subtitle: const Text('جلوگیری از اسکرین‌شات و ضبط صفحه در اپ'),
+                onChanged: auth.toggleScreenSecure,
               ),
             ),
+
+            const SizedBox(height: 16),
+            Divider(color: colorScheme.outlineVariant.withOpacity(0.5)),
             const SizedBox(height: 8),
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: const Icon(Icons.menu_book_outlined, color: Color(0xff5169f6)),
-              title: const Text('راهنمای کامل'),
-              subtitle: const Text('ترجمه و آموزش تمام بخش‌های اپ داخل برنامه'),
+
+            // Action Tiles
+            ActionTile(
+              icon: Icons.help_outline_rounded,
+              title: 'راهنما',
               onTap: () {
                 Get.back();
                 Get.toNamed(Routes.help);
               },
             ),
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: const Icon(Icons.logout, color: Colors.redAccent),
-              title: const Text('خروج دستی'),
-              subtitle: const Text('قفل فوری برنامه و بازگشت به صفحه ورود'),
+            ActionTile(
+              icon: Icons.lock_outline_rounded,
+              title: 'قفل برنامه',
+              isDestructive: true,
               onTap: () async {
                 await auth.lockApp();
                 Get.back();
