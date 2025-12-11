@@ -35,7 +35,7 @@ class PasswordTextField extends StatelessWidget {
           hintText: hint,
           prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
           filled: true,
-          fillColor: colorScheme.surfaceVariant,
+          fillColor: colorScheme.surfaceContainerHighest,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide(color: colorScheme.outlineVariant),

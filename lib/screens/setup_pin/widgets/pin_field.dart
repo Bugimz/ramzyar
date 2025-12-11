@@ -24,7 +24,7 @@ class PinField extends StatelessWidget {
       maxLength: 4,
       decoration: InputDecoration(
         filled: true,
-        fillColor: colorScheme.surfaceVariant,
+        fillColor: colorScheme.surfaceContainerHighest,
         prefixIcon: const Icon(Icons.lock_outline),
         suffixIcon: IconButton(
           icon: Icon(showText ? Icons.visibility_off : Icons.visibility),

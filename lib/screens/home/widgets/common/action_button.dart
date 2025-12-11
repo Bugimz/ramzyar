@@ -55,7 +55,7 @@ class ActionButton extends StatelessWidget {
         backgroundColor = Colors.transparent;
         iconColor = colorScheme.primary;
       case ActionButtonVariant.ghost:
-        backgroundColor = colorScheme.surfaceVariant.withOpacity(0.5);
+        backgroundColor = colorScheme.surfaceContainerHighest.withOpacity(0.5);
         iconColor = colorScheme.onSurfaceVariant;
     }
 

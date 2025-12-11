@@ -1,10 +1,29 @@
+/// مدل ذخیره پسورد
+///
+/// شامل:
+/// - عنوان و نام کاربری
+/// - پسورد (رمزنگاری شده در DB)
+/// - سایت و یادداشت (اختیاری)
 class PasswordEntry {
+  /// شناسه یکتا (از DB)
   final int? id;
+
+  /// عنوان نمایشی
   final String title;
+
+  /// نام کاربری
   final String username;
+
+  /// رمز عبور (رمزنگاری می‌شود)
   final String password;
+
+  /// آدرس وبسایت (اختیاری)
   final String? website;
+
+  /// یادداشت (اختیاری)
   final String? notes;
+
+  /// زمان ایجاد
   final DateTime createdAt;
 
   PasswordEntry({

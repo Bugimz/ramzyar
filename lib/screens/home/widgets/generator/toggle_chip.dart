@@ -30,7 +30,7 @@ class ToggleChip extends StatelessWidget {
                   colors: [colorScheme.primary, colorScheme.secondary],
                 )
               : null,
-          color: value ? null : colorScheme.surfaceVariant,
+          color: value ? null : colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(16),
           border: value ? null : Border.all(color: colorScheme.outlineVariant),
           boxShadow: value

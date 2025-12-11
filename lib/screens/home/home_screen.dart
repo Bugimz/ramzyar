@@ -9,6 +9,11 @@ import 'widgets/navigation/floating_add_button.dart';
 import 'widgets/generator/generator_view.dart';
 import 'widgets/vault/vault_view.dart';
 
+/// صفحه اصلی برنامه
+///
+/// شامل دو تب:
+/// - Vault: لیست پسوردها
+/// - Generator: تولید پسورد تصادفی
 class HomeScreen extends GetView<HomeController> {
   const HomeScreen({super.key});
 
@@ -28,7 +33,7 @@ class HomeScreen extends GetView<HomeController> {
       final isVaultTab = controller.tabIndex.value == 0;
 
       return Scaffold(
-        backgroundColor: colorScheme.background,
+        backgroundColor: colorScheme.surface,
         extendBody: true,
         body: SafeArea(
           bottom: false,

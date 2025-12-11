@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,7 +10,15 @@ import '../services/db_service.dart';
 import '../services/background_monitor_service.dart';
 import '../services/autofill_bridge.dart';
 import '../services/permissions_service.dart';
+import '../screens/home/widgets/common/clipboard_prompt_dialog.dart';
 
+/// کنترلر مدیریت پسوردها
+///
+/// مسئولیت‌ها:
+/// - CRUD پسوردها
+/// - جستجو
+/// - تولید پسورد تصادفی
+/// - پشتیبانی از Auto-fill
 class PasswordController extends GetxController {
   final DbService _dbService = DbService();
   final RxList<PasswordEntry> entries = <PasswordEntry>[].obs;
@@ -29,36 +36,55 @@ class PasswordController extends GetxController {
     _loadAutoPrompt();
   }
 
+  /// بارگذاری تمام entries از دیتابیس
   Future<void> loadEntries() async {
     final data = await _dbService.fetchEntries();
     entries.assignAll(data);
   }
 
+  /// افزودن entry جدید - بهینه‌سازی شده برای جلوگیری از reload کامل
   Future<void> addEntry(PasswordEntry entry) async {
-    await _dbService.insertEntry(entry);
-    await AutofillBridge.cacheEntry(entry);
-    await loadEntries();
+    final id = await _dbService.insertEntry(entry);
+    if (id > 0) {
+      // اضافه کردن به ابتدای لیست بدون نیاز به reload
+      final newEntry = entry.copyWith(id: id);
+      entries.insert(0, newEntry);
+      await AutofillBridge.cacheEntry(newEntry);
+    }
   }
 
+  /// به‌روزرسانی entry - بهینه‌سازی شده
   Future<void> updateEntry(PasswordEntry entry) async {
-    await _dbService.updateEntry(entry);
-    await AutofillBridge.cacheEntry(entry);
-    await loadEntries();
+    final result = await _dbService.updateEntry(entry);
+    if (result > 0) {
+      // به‌روزرسانی در لیست بدون reload
+      final index = entries.indexWhere((e) => e.id == entry.id);
+      if (index >= 0) {
+        entries[index] = entry;
+      }
+      await AutofillBridge.cacheEntry(entry);
+    }
   }
 
+  /// حذف entry - بهینه‌سازی شده
   Future<void> deleteEntry(int id) async {
-    await _dbService.deleteEntry(id);
-    await loadEntries();
+    final result = await _dbService.deleteEntry(id);
+    if (result > 0) {
+      // حذف از لیست بدون reload
+      entries.removeWhere((e) => e.id == id);
+    }
   }
 
   List<PasswordEntry> get filteredEntries {
     final term = searchTerm.value.trim();
     if (term.isEmpty) return entries;
     return entries
-        .where((item) =>
-            item.title.contains(term) ||
-            item.username.contains(term) ||
-            (item.website?.contains(term) ?? false))
+        .where(
+          (item) =>
+              item.title.contains(term) ||
+              item.username.contains(term) ||
+              (item.website?.contains(term) ?? false),
+        )
         .toList();
   }
 
@@ -125,11 +151,15 @@ class PasswordController extends GetxController {
       if (_dialogVisible) return;
       _dialogVisible = true;
       Get.dialog(
-        _ClipboardPrompt(
+        ClipboardPromptDialog(
           content: text,
           onSave: (username, password) {
             addEntry(
-              PasswordEntry(title: 'ورود سریع', username: username, password: password),
+              PasswordEntry(
+                title: 'ورود سریع',
+                username: username,
+                password: password,
+              ),
             );
             _dialogVisible = false;
           },
@@ -146,48 +176,5 @@ class PasswordController extends GetxController {
   void onClose() {
     _clipboardTimer?.cancel();
     super.onClose();
-  }
-}
-
-class _ClipboardPrompt extends StatelessWidget {
-  const _ClipboardPrompt({
-    required this.content,
-    required this.onSave,
-    required this.onCancel,
-  });
-
-  final String content;
-  final void Function(String username, String password) onSave;
-  final VoidCallback onCancel;
-
-  @override
-  Widget build(BuildContext context) {
-    final parts = content.split(':');
-    final username = parts.first.trim();
-    final password = parts.length > 1 ? parts.sublist(1).join(':').trim() : '';
-
-    return AlertDialog(
-      title: const Text('ذخیره رمز جدید؟'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('به نظر می‌رسد نام کاربری و رمز عبور جدیدی وارد کرده‌اید.'),
-          const SizedBox(height: 12),
-          Text('نام کاربری: $username'),
-          Text('رمز عبور: $password'),
-        ],
-      ),
-      actions: [
-        TextButton(onPressed: onCancel, child: const Text('خیر')),
-        ElevatedButton(
-          onPressed: () {
-            onSave(username, password);
-            Get.back();
-          },
-          child: const Text('بله، ذخیره کن'),
-        ),
-      ],
-    );
   }
 }

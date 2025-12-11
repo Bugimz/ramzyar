@@ -14,7 +14,7 @@ class LengthSlider extends GetView<GeneratorController> {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: colorScheme.surfaceVariant.withOpacity(0.5),
+        color: colorScheme.surfaceContainerHighest.withOpacity(0.5),
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: colorScheme.outlineVariant.withOpacity(0.5)),
       ),

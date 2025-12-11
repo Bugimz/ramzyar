@@ -11,7 +11,7 @@ import 'widgets/password_text_field.dart';
 import 'widgets/password_tips.dart';
 
 class AddEditPasswordScreen extends GetView<PasswordFormController> {
-  AddEditPasswordScreen({super.key, this.entry});
+  const AddEditPasswordScreen({super.key, this.entry});
 
   final PasswordEntry? entry;
 
@@ -90,7 +90,12 @@ class AddEditPasswordScreen extends GetView<PasswordFormController> {
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 780),
                   child: SingleChildScrollView(
-                    padding: EdgeInsets.fromLTRB(horizontal, 10, horizontal, 28),
+                    padding: EdgeInsets.fromLTRB(
+                      horizontal,
+                      10,
+                      horizontal,
+                      28,
+                    ),
                     child: Column(
                       children: [
                         const SizedBox(height: 6),
@@ -101,8 +106,12 @@ class AddEditPasswordScreen extends GetView<PasswordFormController> {
                             borderRadius: BorderRadius.circular(24),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black
-                                    .withOpacity(Theme.of(context).brightness == Brightness.dark ? 0.32 : 0.06),
+                                color: Colors.black.withOpacity(
+                                  Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? 0.32
+                                      : 0.06,
+                                ),
                                 blurRadius: 18,
                                 offset: const Offset(0, 10),
                               ),
@@ -129,19 +138,31 @@ class AddEditPasswordScreen extends GetView<PasswordFormController> {
                                 label: 'نام کاربری / ایمیل',
                                 hint: 'user@company.com',
                                 prefixIcon: Icons.person_outline,
-                                autofillHints: const [AutofillHints.username, AutofillHints.email],
+                                autofillHints: const [
+                                  AutofillHints.username,
+                                  AutofillHints.email,
+                                ],
                               ),
-                              Obx(() => PasswordSecretField(
-                                    controller: controller.passwordController,
-                                    showPassword: controller.showPassword.value,
-                                    onToggle: controller.showPassword.toggle,
-                                    onGenerate: () {
-                                      final generated = controller.passwords.generatePassword();
-                                      controller.passwordController.text = generated;
-                                      Clipboard.setData(ClipboardData(text: generated));
-                                      Get.snackbar('رمز قوی تولید شد', 'در کلیپ‌بورد نیز کپی شد');
-                                    },
-                                  )),
+                              Obx(
+                                () => PasswordSecretField(
+                                  controller: controller.passwordController,
+                                  showPassword: controller.showPassword.value,
+                                  onToggle: controller.showPassword.toggle,
+                                  onGenerate: () {
+                                    final generated = controller.passwords
+                                        .generatePassword();
+                                    controller.passwordController.text =
+                                        generated;
+                                    Clipboard.setData(
+                                      ClipboardData(text: generated),
+                                    );
+                                    Get.snackbar(
+                                      'رمز قوی تولید شد',
+                                      'در کلیپ‌بورد نیز کپی شد',
+                                    );
+                                  },
+                                ),
+                              ),
                               PasswordTextField(
                                 controller: controller.websiteController,
                                 label: 'وبسایت (اختیاری)',
@@ -166,13 +187,19 @@ class AddEditPasswordScreen extends GetView<PasswordFormController> {
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: colorScheme.primary,
                                     foregroundColor: colorScheme.onPrimary,
-                                    padding: const EdgeInsets.symmetric(vertical: 14),
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 14,
+                                    ),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(14),
                                     ),
                                   ),
-                                  label: Text('ذخیره',
-                                      style: textTheme.titleSmall?.copyWith(color: Colors.white)),
+                                  label: Text(
+                                    'ذخیره',
+                                    style: textTheme.titleSmall?.copyWith(
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],

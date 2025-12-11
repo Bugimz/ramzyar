@@ -49,7 +49,7 @@ class AutoPromptCard extends StatelessWidget {
                         colors: [colorScheme.primary, colorScheme.secondary],
                       )
                     : null,
-                color: isEnabled ? null : colorScheme.surfaceVariant,
+                color: isEnabled ? null : colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Icon(

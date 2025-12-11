@@ -3,14 +3,25 @@ import 'package:get/get.dart';
 
 import 'password_controller.dart';
 
+/// کنترلر تولید رمز عبور تصادفی
+///
+/// امکانات:
+/// - تنظیم طول رمز (8-32 کاراکتر)
+/// - انتخاب نوع کاراکترها (اعداد/نمادها/حروف)
+/// - کپی به کلیپ‌بورد
 class GeneratorController extends GetxController {
   final PasswordController passwords = Get.find<PasswordController>();
 
+  /// طول رمز عبور
   final RxInt length = 16.obs;
+
+  /// تنظیمات کاراکترها
   final RxBool numbers = true.obs;
   final RxBool symbols = true.obs;
   final RxBool lower = true.obs;
   final RxBool upper = true.obs;
+
+  /// رمز تولید شده
   final RxString generated = ''.obs;
 
   @override

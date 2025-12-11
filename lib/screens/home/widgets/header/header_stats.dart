@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
 class HeaderStats extends StatelessWidget {
-  const HeaderStats({
-    super.key,
-    required this.total,
-    required this.isWide,
-  });
+  const HeaderStats({super.key, required this.total, required this.isWide});
 
   final int total;
   final bool isWide;
@@ -15,12 +11,9 @@ class HeaderStats extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: isWide ? 20 : 16,
-        vertical: 14,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: isWide ? 20 : 16, vertical: 14),
       decoration: BoxDecoration(
-        color: colorScheme.surfaceVariant.withOpacity(0.3),
+        color: colorScheme.surfaceContainerHighest.withOpacity(0.3),
       ),
       child: Row(
         children: [
@@ -126,7 +119,11 @@ class _HealthIndicator extends StatelessWidget {
               color: _healthColor.withOpacity(0.15),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Icon(Icons.verified_rounded, size: 16, color: _healthColor),
+            child: const Icon(
+              Icons.verified_rounded,
+              size: 16,
+              color: _healthColor,
+            ),
           ),
           const SizedBox(width: 10),
           Column(

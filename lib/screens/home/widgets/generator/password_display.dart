@@ -28,7 +28,7 @@ class PasswordDisplay extends GetView<GeneratorController> {
                   ],
                 )
               : null,
-          color: hasPassword ? null : colorScheme.surfaceVariant,
+          color: hasPassword ? null : colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: hasPassword

@@ -77,7 +77,7 @@ class SelectChip extends StatelessWidget {
           decoration: BoxDecoration(
             color: isSelected
                 ? colorScheme.primaryContainer
-                : colorScheme.surfaceVariant.withOpacity(0.5),
+                : colorScheme.surfaceContainerHighest.withOpacity(0.5),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: isSelected
@@ -124,7 +124,7 @@ class ToggleTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: colorScheme.surfaceVariant.withOpacity(0.3),
+        color: colorScheme.surfaceContainerHighest.withOpacity(0.3),
         borderRadius: BorderRadius.circular(14),
       ),
       child: Row(

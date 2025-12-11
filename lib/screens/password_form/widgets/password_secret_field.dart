@@ -29,13 +29,15 @@ class PasswordSecretField extends StatelessWidget {
           hintText: 'یک رمز قوی وارد کنید یا بسازید',
           prefixIcon: const Icon(Icons.lock_outline),
           filled: true,
-          fillColor: colorScheme.surfaceVariant,
+          fillColor: colorScheme.surfaceContainerHighest,
           suffixIcon: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
                 tooltip: showPassword ? 'مخفی کردن' : 'نمایش',
-                icon: Icon(showPassword ? Icons.visibility_off : Icons.visibility),
+                icon: Icon(
+                  showPassword ? Icons.visibility_off : Icons.visibility,
+                ),
                 onPressed: onToggle,
               ),
               IconButton(
